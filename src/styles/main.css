@@ -1,0 +1,45 @@
+
+.container {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
+}
+
+.menu {
+    height: 190px;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+
+    background-color: #000000;
+
+    color: #ffffff;
+}
+.menu__menu-title {
+    color: #ff0000;
+}
+
+.panel {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #ff0000;
+
+}
+
+.panel__square {
+    height: 150px;
+    width: 150px;
+
+    border: 1px solid #000000;
+
+}
+
+.panel__enemy {
+    background-image: url('../img/enemy-gif.gif');
+    background-size: cover; /* ou 'contain', dependendo do efeito desejado */
+}    
