@@ -17,13 +17,13 @@
                 <h2 class="banner__subtitle">Time Left: <span id="time-left">0</span></h2>
                 <h2 class="banner__subtitle">Your Score: <span id="score">0</span></h2>
             <div class="banner__start is-flex">
-                <button class="banner__button">Start</button>
+                <button class="banner__button" id="initButton" onclick="startGame()">Start</button>
             </div>
         </div>
     </header>
     <main class="panel">
         <div class="panel__row is-flex">
-            <div class="panel__square panel__square--enemy" id="1"></div>
+            <div class="panel__square" id="1"></div>
             <div class="panel__square" id="2"></div>
             <div class="panel__square" id="3"></div>
         </div>
@@ -51,5 +51,6 @@
         </ul>
     </footer>
     <script src="https://kit.fontawesome.com/e0954b0c75.js" crossorigin="anonymous"></script>
+    <script src="./src/scripts/engine.js"></script>
 </body>
 </html>
