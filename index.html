@@ -3,46 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="src/styles/reset.css">
-    <link rel="stylesheet" href="src/styles/main.css">
+    <link rel="stylesheet" href="./src/styles/reset.css">
+    <link rel="stylesheet" href="./src/styles/main.css">
     <title>Dante Dash</title>
 </head>
 <body>
-    <div class="container">
-        <header class="menu">
-            <div class="menu__time">
-                <h2 class="menu__menu-title">Time Left</h2>
-                <h2>0</h2>
+    <header class="banner">
+        <div class="banner__logo is-flex">
+            <img class="banner__img" src="./src/img/player.png" alt="Logo Dante Dash">
+            <h1 class="banner__title is-golden">Dante Dash</h1>
+        </div>
+        <div class="banner__pannel">
+                <h2 class="banner__subtitle">Time Left: <span id="time-left">0</span></h2>
+                <h2 class="banner__subtitle">Your Score: <span id="score">0</span></h2>
+            <div class="banner__start is-flex">
+                <button class="banner__button">Start</button>
             </div>
-            <div class="menu__score">
-                <h2 class="menu__menu-title">Your Score</h2>
-                <h2>0</h2>
-            </div>
-            <div class="menu__lives">
-                <img src="" alt="" />
-                <h2>x3</h2>
-            </div>
-        </header>
+        </div>
+    </header>
+    <main class="panel">
+        <div class="panel__row is-flex">
+            <div class="panel__square panel__square--enemy" id="1"></div>
+            <div class="panel__square" id="2"></div>
+            <div class="panel__square" id="3"></div>
+        </div>
+        <div class="panel__row is-flex">
+            <div class="panel__square" id="4"></div>
+            <div class="panel__square" id="5"></div>
+            <div class="panel__square" id="6"></div>
+        </div>
+        <div class="panel__row is-flex">
+            <div class="panel__square" id="7"></div>
+            <div class="panel__square" id="8"></div>
+            <div class="panel__square" id="9"></div>
+        </div>
 
-        <main class="panel">
-            <div class="panel__row">
-                <div class="panel__square panel__enemy" id="0"></div>
-                <div class="panel__square" id="1"></div>
-                <div class="panel__square" id="2"></div>
-            </div>
-            <div class="panel__row">
-                <div class="panel__square" id="3"></div>
-                <div class="panel__square" id="4"></div>
-                <div class="panel__square" id="5"></div>
-            </div>
-            <div class="panel__row">
-                <div class="panel__square" id="6"></div>
-                <div class="panel__square" id="7"></div>
-                <div class="panel__square" id="8"></div>
-            </div>
-        </main>
-    </div>
-
-    <script defer src="src/scripts/engine.js"></script>
+    </main>
+    <footer class="social-media">
+        <p class="social-media__message">Desenvolvido por Juliana Chaves Palm</p>
+        <ul class="social-media__links" >
+                <li class="social-media__item">
+                    <a href="mailto:julianachavespalm@gmail.com" class="social-media__link"><i class="fa-regular fa-envelope" aria-disabled="true"></i> E-mail</a>
+            </li>
+                <li class="social-media__item">
+                    <a href="https://www.linkedin.com/in/julianachavespalm" class="social-media__link"><i class="fa-brands fa-linkedin" aria-disabled="true"></i> LinkedIn</a>
+            </li>
+        </ul>
+    </footer>
+    <script src="https://kit.fontawesome.com/e0954b0c75.js" crossorigin="anonymous"></script>
 </body>
 </html>
