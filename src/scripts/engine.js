@@ -73,7 +73,6 @@ function init() {
 function startGame() {
     if (!state.actions.gameStarted) {
         state.actions.gameStarted = true;
-        document.getElementById('initButton').disabled = true;
         state.actions.timerId = setInterval(randomSquare, 1000);
         state.actions.countDownTimerId = setInterval(countDown, 1000);
         init();
