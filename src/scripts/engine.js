@@ -29,6 +29,13 @@ function countDown() {
     }
 }
 
+const restartButton = document.querySelector('.board__reset');
+
+function restartGame() {
+    localStorage.clear();
+    window.location.reload();
+}
+
 function randomSquare() {
     state.view.squares.forEach((square) => {
         square.classList.remove("enemy");
