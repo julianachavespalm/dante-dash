@@ -6,7 +6,7 @@
 [![PWA Ready](https://img.shields.io/badge/PWA-Offline%20First-brightgreen.svg)](#suporte-pwa-e-offline-first)
 [![Zero Dependencies](https://img.shields.io/badge/Runtime-Zero%20Dependencies%20(Vanilla%20ES6)-blue.svg)](#arquitetura-e-estrutura)
 [![Tests](https://img.shields.io/badge/Tests-node%3Atest%20(100%25%20Passing)-success.svg)](#testes-automatizados)
-[![Gameplay](https://img.shields.io/badge/Jogar%20Online-julianachavespalm.live-orange.svg)](https://julianachavespalm.live/dante-dash/)
+[![Gameplay](https://img.shields.io/badge/Jogar%20Online-GitHub%20Pages-orange.svg)](https://julianachavespalm.github.io/dante-dash/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg)](LICENSE)
 
 ---
@@ -101,7 +101,7 @@ npm run test:coverage
 
 ## 🎮 Como Jogar
 
-Acesse a versão ao vivo: **[https://julianachavespalm.live/dante-dash/](https://julianachavespalm.live/dante-dash/)**
+Acesse a versão ao vivo: **[https://julianachavespalm.github.io/dante-dash/](https://julianachavespalm.github.io/dante-dash/)**
 
 | Dispositivo | Ação | Como Acertar |
 | :--- | :--- | :--- |
