@@ -23,7 +23,7 @@
                 <h1 class="banner__title is-golden">Dante Dash</h1>
             </div>
 
-            <!-- HUD de Status Arcade Responsivo com Ícones do Google Fonts (Caber tudo na tela) -->
+            <!-- HUD de Status Arcade Responsivo com Ícones do Google Fonts -->
             <div class="banner__scoreboard">
                 <div class="score-card" title="Tempo restante">
                     <span class="material-symbols-outlined score-icon">schedule</span>
@@ -52,15 +52,19 @@
                 </div>
             </div>
 
-            <!-- Barra Encaixada de Botões 8-Bits (Cores das Canetinhas do Dante com Ícones Google Fonts) -->
+            <!-- Barra Encaixada de Botões 8-Bits com Botão de Informação/Ajuda -->
             <div class="banner__controls-dock">
-                <button class="pixel-btn btn-blue" id="initButton" onclick="startGame()">
+                <button class="pixel-btn btn-blue" id="initButton" onclick="startGame()" title="Iniciar Partida">
                     <span class="material-symbols-outlined">play_arrow</span>
                     <span>INICIAR</span>
                 </button>
-                <button class="pixel-btn btn-red" id="musicButton" onclick="toggleMusic()">
+                <button class="pixel-btn btn-red" id="musicButton" onclick="toggleMusic()" title="Ligar/Desligar Trilha Sonora">
                     <span class="material-symbols-outlined">volume_off</span>
                     <span>MÚSICA: OFF</span>
+                </button>
+                <button class="pixel-btn btn-info" id="infoButton" onclick="toggleHowToPlay()" title="Como Jogar">
+                    <span class="material-symbols-outlined">help</span>
+                    <span>AJUDA</span>
                 </button>
             </div>
 
@@ -92,7 +96,6 @@
                     <div class="panel__square" id="9" data-key="9"><span class="key-hint">9</span></div>
                 </div>
             </div>
-            <p class="panel__hint">Dica: toque na tela ou use o teclado numérico de 1 a 9 (ou QWE/ASD/ZXC)!</p>
         </main>
 
         <!-- Rodapé Oficial de Autoria -->
@@ -131,6 +134,55 @@
             <button class="pixel-btn btn-blue" onclick="restartGame()">
                 <span class="material-symbols-outlined">replay</span>
                 <span>JOGAR NOVAMENTE</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Arcade: Como Jogar (Botão de Ajuda) -->
+    <div id="how-to-play-modal" class="modal hidden" onclick="if(event.target === this) toggleHowToPlay()">
+        <div class="modal__card modal__card--info">
+            <h2 class="modal__title is-golden">
+                <span class="material-symbols-outlined">help</span>
+                <span>COMO JOGAR</span>
+            </h2>
+            
+            <div class="modal__instructions">
+                <div class="instruction-row">
+                    <span class="material-symbols-outlined inst-icon icon-touch">touch_app</span>
+                    <div class="inst-content">
+                        <strong>Smartphone / Tablet:</strong>
+                        <p>Toque diretamente no bloco onde o Dante aparecer!</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-row">
+                    <span class="material-symbols-outlined inst-icon icon-key">keyboard</span>
+                    <div class="inst-content">
+                        <strong>Teclado no Desktop:</strong>
+                        <p>Use as teclas <code>1</code> a <code>9</code> ou <code>QWE / ASD / ZXC</code> correspondentes à posição no grid.</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-row">
+                    <span class="material-symbols-outlined inst-icon icon-fire">local_fire_department</span>
+                    <div class="inst-content">
+                        <strong>Combos & Multiplicadores:</strong>
+                        <p>Acerte alvos seguidos para acelerar a pontuação até <code>x4</code>!</p>
+                    </div>
+                </div>
+                
+                <div class="instruction-row">
+                    <span class="material-symbols-outlined inst-icon icon-heart">favorite</span>
+                    <div class="inst-content">
+                        <strong>Cuidado com as Vidas:</strong>
+                        <p>Você tem 3 vidas. Clicar em quadrados vazios custa 1 coração.</p>
+                    </div>
+                </div>
+            </div>
+
+            <button class="pixel-btn btn-blue" onclick="toggleHowToPlay()">
+                <span class="material-symbols-outlined">check_circle</span>
+                <span>ENTENDI</span>
             </button>
         </div>
     </div>

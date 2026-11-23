@@ -1,7 +1,7 @@
 /* ==========================================================================
-   Dante Dash - Arcade Edition Stylesheet v2.4
-   Tela 100% Sem Rolagem (Zero Rolagem Vertical e Horizontal no Desktop e Mobile)
-   Layout Adaptativo com clamp(vh), Ícones Google Fonts e Dock 8-Bits das Canetinhas
+   Dante Dash - Arcade Edition Stylesheet v2.5
+   Tela 100% Sem Rolagem, Sem Linhas Azuis Separadoras, Sem Texto Solto
+   Botão de Ajuda/Instruções Integrado, Ícones Google Fonts e Dock 8-Bits
    Engenharia de Software: Juliana Chaves Palm
    ========================================================================== */
 
@@ -85,7 +85,7 @@ a {
     font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
-/* Topo / Banner Arcade Compacto */
+/* Topo / Banner Arcade (Sem linha azul separadora) */
 .banner {
     width: 100%;
     display: flex;
@@ -94,7 +94,7 @@ a {
     padding: 0.35rem 0.5rem 0.2rem;
     font-family: "Press Start 2P", monospace;
     background: linear-gradient(180deg, #181824 0%, #0F0F16 100%);
-    border-bottom: 2px solid #1D4ED8;
+    border-bottom: 1px solid #1C1C2A; /* Borda neutra sutil, sem linha azul */
     flex-shrink: 0;
 }
 
@@ -190,41 +190,43 @@ a {
     font-variation-settings: 'FILL' 0;
 }
 
-/* Barra de Controles Encaixada (Docked 8-Bits) */
+/* Barra de Controles Encaixada (Docked 8-Bits com 3 Botões) */
 .banner__controls-dock {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.45rem;
     width: 96%;
-    max-width: 420px;
+    max-width: 440px;
     margin: 0.25rem auto 0.15rem;
-    padding: 0.3rem 0.4rem;
+    padding: 0.25rem 0.35rem;
     background: #0B0B12;
     border: 2px solid #242436;
     border-radius: 4px;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
-/* Botões 8-Bits com Cores das Canetinhas do Dante */
+/* Botões 8-Bits com Ícones */
 .pixel-btn {
     font-family: "Press Start 2P", monospace;
-    font-size: 0.58rem;
-    padding: 0.45rem 0.75rem;
+    font-size: 0.54rem;
+    padding: 0.42rem 0.65rem;
     cursor: pointer;
     border: none;
     user-select: none;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.3rem;
+    gap: 0.25rem;
     transition: transform 0.05s ease, filter 0.1s ease;
     border-radius: 2px;
+    flex: 1;
+    white-space: nowrap;
 }
 
 .pixel-btn .material-symbols-outlined {
-    font-size: 0.85rem;
+    font-size: 0.82rem;
 }
 
 /* Botão Azul Canetinha Dante */
@@ -272,13 +274,31 @@ a {
     color: #FEF08A;
 }
 
+/* Botão de Ajuda / Como Jogar */
+.btn-info {
+    background-color: #334155;
+    color: #F8FAFC;
+    border: 2px solid #000000;
+    box-shadow: inset -2px -2px 0px #0F172A, inset 2px 2px 0px #64748B, 2px 2px 0px #000000;
+}
+
+.btn-info:hover {
+    background-color: #475569;
+    filter: brightness(1.15);
+}
+
+.btn-info:active {
+    transform: translate(2px, 2px);
+    box-shadow: inset -1px -1px 0px #0F172A, inset 1px 1px 0px #64748B, 0px 0px 0px #000000;
+}
+
 /* Faixa de História / Lore Bar */
 .arcade-lore-bar {
     display: flex;
     align-items: center;
     gap: 0.4rem;
     width: 96%;
-    max-width: 420px;
+    max-width: 440px;
     margin: 0.2rem auto 0;
     padding: 0.2rem 0.45rem;
     background: rgba(0, 0, 0, 0.65);
@@ -334,7 +354,7 @@ a {
     50% { transform: scale(1.18); text-shadow: 0 0 14px #FFD700; }
 }
 
-/* Painel da Arena 3x3 - Altura Flexível com Clamp */
+/* Painel da Arena 3x3 (Sem bordas azuis) */
 .panel-container {
     flex: 1;
     min-height: 0;
@@ -351,7 +371,7 @@ a {
     background-image: url('../img/wall.png');
     background-size: cover;
     background-position: center;
-    border: 3px solid #1D4ED8;
+    border: 3px solid #33334A; /* Borda neutra/pedra, sem linha azul */
     border-radius: 6px;
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.85), inset 0 0 12px rgba(0, 0, 0, 0.8);
     touch-action: manipulation;
@@ -369,8 +389,8 @@ a {
 /* Quadrado da Arena escala perfeitamente com a altura da tela (vh) */
 .panel__square {
     position: relative;
-    width: clamp(56px, 11.5vh, 76px);
-    height: clamp(56px, 11.5vh, 76px);
+    width: clamp(56px, 12vh, 78px);
+    height: clamp(56px, 12vh, 78px);
     background: #161620;
     border: 2px solid #2D2D40;
     border-radius: 5px;
@@ -422,15 +442,7 @@ a {
     100% { background-color: #161620; }
 }
 
-.panel__hint {
-    margin-top: 0.3rem;
-    font-size: 0.68rem;
-    color: #8888A0;
-    text-align: center;
-    padding: 0 0.5rem;
-}
-
-/* Modal Arcade de Game Over */
+/* Modal Arcade: Genérico e Como Jogar */
 .modal {
     position: fixed;
     top: 0;
@@ -462,6 +474,74 @@ a {
     width: 90%;
     box-shadow: 0 0 35px rgba(255, 215, 0, 0.35);
     font-family: "Press Start 2P", monospace;
+}
+
+.modal__card--info {
+    max-width: 440px;
+    text-align: left;
+    border-color: #38BDF8;
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.35);
+}
+
+.modal__card--info .modal__title {
+    color: #38BDF8;
+    text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+    margin-bottom: 0.85rem;
+}
+
+.modal__instructions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+    margin-bottom: 1.15rem;
+    font-family: 'Wix Madefor Display', sans-serif;
+}
+
+.instruction-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    background: #0C0C14;
+    border: 1px solid #232336;
+    border-radius: 6px;
+    padding: 0.45rem 0.6rem;
+}
+
+.inst-icon {
+    font-size: 1.25rem !important;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.icon-touch { color: #38BDF8; }
+.icon-key { color: #A78BFA; }
+.icon-fire { color: #F97316; }
+.icon-heart { color: #EF4444; }
+
+.inst-content strong {
+    font-size: 0.82rem;
+    color: #F8FAFC;
+    display: block;
+    margin-bottom: 0.15rem;
+}
+
+.inst-content p {
+    font-size: 0.74rem;
+    color: #94A3B8;
+    line-height: 1.3;
+}
+
+.inst-content code {
+    background: #1E1E2E;
+    color: #FFD700;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-family: "Press Start 2P", monospace;
+    font-size: 0.58rem;
+}
+
+.modal__card--info .pixel-btn {
+    width: 100%;
 }
 
 .modal__img {
@@ -501,7 +581,7 @@ a {
     line-height: 1.6;
 }
 
-/* Rodapé Oficial de Autoria Compacto (Cabe sempre no rodapé sem rolagem) */
+/* Rodapé Oficial de Autoria Compacto */
 .social-media {
     width: 100%;
     padding: 0.35rem 0.5rem;
@@ -552,11 +632,10 @@ a {
     .score-value { font-size: 0.62rem; }
     .score-icon { font-size: 0.75rem !important; }
     .banner__controls-dock { margin: 0.15rem auto 0.1rem; padding: 0.2rem 0.3rem; }
-    .pixel-btn { font-size: 0.52rem; padding: 0.35rem 0.55rem; }
+    .pixel-btn { font-size: 0.5rem; padding: 0.32rem 0.5rem; }
     .arcade-lore-bar { padding: 0.15rem 0.35rem; }
     .lore-text { font-size: 0.65rem; }
     .panel-container { padding: 0.1rem 0.4rem; }
     .panel { padding: 0.35rem; }
-    .panel__hint { display: none; } /* Oculta dica em telas muito baixas para priorizar arena */
     .social-media { padding: 0.25rem 0.4rem; font-size: 0.62rem; }
 }

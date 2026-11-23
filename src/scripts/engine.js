@@ -330,12 +330,28 @@ function setupEvents() {
             startMatch();
         } else if (key === "m") {
             toggleMusic();
+        } else if (key === "h" || key === "?") {
+            toggleHowToPlay();
+        } else if (key === "escape") {
+            const infoModal = document.getElementById("how-to-play-modal");
+            if (infoModal && !infoModal.classList.contains("hidden")) {
+                infoModal.classList.add("hidden");
+            }
         }
     });
 
     window.startGame = startMatch;
     window.restartGame = startMatch;
     window.toggleMusic = toggleMusic;
+    window.toggleHowToPlay = toggleHowToPlay;
+}
+
+function toggleHowToPlay() {
+    state.engines.synth.init();
+    const modal = document.getElementById("how-to-play-modal");
+    if (modal) {
+        modal.classList.toggle("hidden");
+    }
 }
 
 function initGame() {
