@@ -154,7 +154,9 @@ a {
 .score-card:nth-child(5) .score-icon { color: #EF4444; }
 
 .score-label {
-    font-size: 0.42rem;
+    font-family: "Silkscreen", monospace;
+    font-size: 0.48rem;
+    font-weight: 700;
     color: #94A3B8;
     margin-bottom: 0.15rem;
     letter-spacing: 0.4px;
@@ -205,10 +207,11 @@ a {
     box-sizing: border-box;
 }
 
-/* Botões 8-Bits com Ícones (Caberem automaticamente na div) */
+/* Botões 8-Bits com Ícones (Fonte Silkscreen de Alta Legibilidade) */
 .pixel-btn {
-    font-family: "Press Start 2P", monospace;
-    font-size: 0.35rem;
+    font-family: "Silkscreen", monospace;
+    font-weight: 700;
+    font-size: 0.38rem;
     padding: 0.35rem 0.1rem;
     cursor: pointer;
     border: none;
@@ -341,11 +344,11 @@ a {
 .lore-tag {
     background: #FFD700;
     color: #000000;
-    font-family: "Press Start 2P", monospace;
-    font-size: 0.44rem;
+    font-family: "Silkscreen", monospace;
+    font-size: 0.52rem;
+    font-weight: 700;
     padding: 1px 4px;
     border-radius: 2px;
-    font-weight: bold;
     white-space: nowrap;
 }
 
@@ -452,9 +455,10 @@ a {
     position: absolute;
     bottom: 3px;
     right: 5px;
-    font-size: 0.6rem;
+    font-size: 0.68rem;
     color: #64748B;
-    font-family: "Press Start 2P", monospace;
+    font-family: "Silkscreen", monospace;
+    font-weight: 700;
     pointer-events: none;
     z-index: 2;
 }
@@ -518,7 +522,7 @@ a {
     max-width: 360px;
     width: 90%;
     box-shadow: 0 0 35px rgba(255, 215, 0, 0.35);
-    font-family: "Press Start 2P", monospace;
+    font-family: 'Wix Madefor Display', sans-serif;
 }
 
 .modal__card--info {
@@ -596,7 +600,8 @@ a {
 }
 
 .modal__title {
-    font-size: 1rem;
+    font-family: "Press Start 2P", monospace;
+    font-size: 0.95rem;
     margin-bottom: 0.4rem;
     display: flex;
     align-items: center;
@@ -622,7 +627,8 @@ a {
     border-radius: 4px;
     padding: 0.65rem;
     margin-bottom: 1rem;
-    font-size: 0.62rem;
+    font-family: "Silkscreen", monospace;
+    font-size: 0.72rem;
     line-height: 1.6;
 }
 
@@ -651,9 +657,9 @@ a {
     background: none;
     border: none;
     color: #FFD700;
-    font-family: inherit;
-    font-size: inherit;
-    font-weight: 600;
+    font-family: "Silkscreen", monospace;
+    font-size: 0.65rem;
+    font-weight: 700;
     cursor: pointer;
     text-decoration: underline;
     text-underline-offset: 3px;
@@ -689,22 +695,26 @@ a {
 
 .credit-role {
     display: block;
-    font-family: "Press Start 2P", monospace;
-    font-size: 0.42rem;
+    font-family: "Silkscreen", monospace;
+    font-weight: 700;
+    font-size: 0.52rem;
     letter-spacing: 0.5px;
     margin-bottom: 0.2rem;
 }
 
 .credit-name {
-    font-size: 0.85rem;
+    font-family: "Silkscreen", monospace;
+    font-weight: 700;
+    font-size: 0.88rem;
     color: #F8FAFC;
     display: block;
-    margin-bottom: 0.12rem;
+    margin-bottom: 0.15rem;
 }
 
 .credit-desc {
-    font-size: 0.7rem;
-    color: #94A3B8;
+    font-family: 'Wix Madefor Display', sans-serif;
+    font-size: 0.78rem;
+    color: #CBD5E1;
     line-height: 1.35;
 }
 
