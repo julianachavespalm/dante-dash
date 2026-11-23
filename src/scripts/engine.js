@@ -26,6 +26,7 @@ const state = {
         loreTag: document.querySelector("#lore-tag"),
         loreText: document.querySelector("#lore-text"),
         initButton: document.querySelector("#initButton"),
+        soundButton: document.querySelector("#soundButton"),
         musicButton: document.querySelector("#musicButton"),
         modal: document.querySelector("#game-over-modal"),
         modalTitle: document.querySelector("#modal-title"),
@@ -50,6 +51,7 @@ const state = {
     audio: {
         bgMusic: new Audio("./src/audios/trilha-metal__denis-martino.m4a"),
         isMusicPlaying: false,
+        isSoundEnabled: true,
     }
 };
 
@@ -75,6 +77,8 @@ async function preloadAssets() {
 }
 
 function playSound(type, combo = 1) {
+    if (!state.audio.isSoundEnabled) return;
+
     if (type === "hit") {
         state.engines.synth.playHit(combo);
     } else if (type === "miss") {
@@ -86,13 +90,35 @@ function playSound(type, combo = 1) {
     }
 }
 
+function toggleSound() {
+    state.audio.isSoundEnabled = !state.audio.isSoundEnabled;
+    const btn = state.view.soundButton || document.getElementById("soundButton");
+    if (!btn) return;
+
+    if (state.audio.isSoundEnabled) {
+        btn.innerHTML = `
+            <span class="material-symbols-outlined">volume_up</span>
+            <span>SOM: ON</span>
+        `;
+        btn.classList.remove("is-muted");
+        state.engines.synth.init();
+        state.engines.synth.playHit(1);
+    } else {
+        btn.innerHTML = `
+            <span class="material-symbols-outlined">volume_off</span>
+            <span>SOM: OFF</span>
+        `;
+        btn.classList.add("is-muted");
+    }
+}
+
 function toggleMusic() {
     state.engines.synth.init();
     if (state.audio.isMusicPlaying) {
         state.audio.bgMusic.pause();
         state.audio.isMusicPlaying = false;
         state.view.musicButton.innerHTML = `
-            <span class="material-symbols-outlined">volume_off</span>
+            <span class="material-symbols-outlined">music_note</span>
             <span>MÚSICA: OFF</span>
         `;
         state.view.musicButton.classList.remove("is-playing");
@@ -100,7 +126,7 @@ function toggleMusic() {
         state.audio.bgMusic.play().then(() => {
             state.audio.isMusicPlaying = true;
             state.view.musicButton.innerHTML = `
-                <span class="material-symbols-outlined">volume_up</span>
+                <span class="material-symbols-outlined">music_note</span>
                 <span>MÚSICA: ON</span>
             `;
             state.view.musicButton.classList.add("is-playing");
@@ -330,6 +356,8 @@ function setupEvents() {
             startMatch();
         } else if (key === "m") {
             toggleMusic();
+        } else if (key === "s") {
+            toggleSound();
         } else if (key === "h" || key === "?") {
             toggleHowToPlay();
         } else if (key === "escape") {
@@ -343,6 +371,7 @@ function setupEvents() {
     window.startGame = startMatch;
     window.restartGame = startMatch;
     window.toggleMusic = toggleMusic;
+    window.toggleSound = toggleSound;
     window.toggleHowToPlay = toggleHowToPlay;
 }
 

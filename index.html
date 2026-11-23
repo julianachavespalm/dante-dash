@@ -52,17 +52,21 @@
                 </div>
             </div>
 
-            <!-- Barra Encaixada de Botões 8-Bits com Botão de Informação/Ajuda -->
+            <!-- Barra Encaixada de Botões 8-Bits com Controle de Som, Música e Ajuda -->
             <div class="banner__controls-dock">
-                <button class="pixel-btn btn-blue" id="initButton" onclick="startGame()" title="Iniciar Partida">
+                <button class="pixel-btn btn-blue" id="initButton" onclick="startGame()" title="Iniciar Partida (Espaço)">
                     <span class="material-symbols-outlined">play_arrow</span>
                     <span>INICIAR</span>
                 </button>
-                <button class="pixel-btn btn-red" id="musicButton" onclick="toggleMusic()" title="Ligar/Desligar Trilha Sonora">
-                    <span class="material-symbols-outlined">volume_off</span>
+                <button class="pixel-btn btn-sound" id="soundButton" onclick="toggleSound()" title="Ativar/Desativar Sons do Jogo (Tecla S)">
+                    <span class="material-symbols-outlined">volume_up</span>
+                    <span>SOM: ON</span>
+                </button>
+                <button class="pixel-btn btn-red" id="musicButton" onclick="toggleMusic()" title="Ligar/Desligar Trilha Sonora (Tecla M)">
+                    <span class="material-symbols-outlined">music_note</span>
                     <span>MÚSICA: OFF</span>
                 </button>
-                <button class="pixel-btn btn-info" id="infoButton" onclick="toggleHowToPlay()" title="Como Jogar">
+                <button class="pixel-btn btn-info" id="infoButton" onclick="toggleHowToPlay()" title="Como Jogar (Tecla H)">
                     <span class="material-symbols-outlined">help</span>
                     <span>AJUDA</span>
                 </button>
