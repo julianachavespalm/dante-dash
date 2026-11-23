@@ -1,6 +1,8 @@
 /**
- * Dante Dash - Engine de Jogo Arcade v2.2
+ * Dante Dash - Engine de Jogo Arcade v2.3
  * Arquitetura Desacoplada: FSM, ScoreEngine, SpawnEngine e Web Audio API Synth.
+ * Ícones Oficiais do Google Fonts (Material Symbols Outlined) - Zero emojis.
+ * Sprites com Fundo Transparente para Integração Perfeita com a Arena.
  * 
  * Desenho do Personagem: Dante Chaves Martino (aos 4 anos)
  * Trilha Sonora: Denis Martino
@@ -89,12 +91,18 @@ function toggleMusic() {
     if (state.audio.isMusicPlaying) {
         state.audio.bgMusic.pause();
         state.audio.isMusicPlaying = false;
-        state.view.musicButton.textContent = "♫ MÚSICA: OFF";
+        state.view.musicButton.innerHTML = `
+            <span class="material-symbols-outlined">volume_off</span>
+            <span>MÚSICA: OFF</span>
+        `;
         state.view.musicButton.classList.remove("is-playing");
     } else {
         state.audio.bgMusic.play().then(() => {
             state.audio.isMusicPlaying = true;
-            state.view.musicButton.textContent = "♫ MÚSICA: ON";
+            state.view.musicButton.innerHTML = `
+                <span class="material-symbols-outlined">volume_up</span>
+                <span>MÚSICA: ON</span>
+            `;
             state.view.musicButton.classList.add("is-playing");
         }).catch(() => {
             console.log("Autoplay bloqueado pelo navegador até interação.");
@@ -103,11 +111,16 @@ function toggleMusic() {
 }
 
 function renderLives(livesCount) {
-    let hearts = "";
-    for (let i = 0; i < livesCount; i++) {
-        hearts += "❤️";
+    let html = '<div class="heart-container">';
+    for (let i = 0; i < 3; i++) {
+        if (i < livesCount) {
+            html += '<span class="material-symbols-outlined heart-icon filled">favorite</span>';
+        } else {
+            html += '<span class="material-symbols-outlined heart-icon empty">favorite_border</span>';
+        }
     }
-    state.view.lives.textContent = hearts || "💀";
+    html += '</div>';
+    state.view.lives.innerHTML = html;
 }
 
 function updateLoreDisplay(levelData) {
@@ -144,7 +157,10 @@ function rescheduleSpawn() {
 
     if (levelData.isLevelUp) {
         playSound("levelUp");
-        state.view.comboDisplay.textContent = `★ NÍVEL ${levelData.level}! ★`;
+        state.view.comboDisplay.innerHTML = `
+            <span class="material-symbols-outlined">military_tech</span>
+            <span>NÍVEL ${levelData.level}!</span>
+        `;
         state.view.comboDisplay.classList.add("level-up-pulse");
         setTimeout(() => state.view.comboDisplay.classList.remove("level-up-pulse"), 1200);
     }
@@ -168,7 +184,10 @@ function handleSquareHit(squareId) {
         }
 
         if (hitResult.combo >= 2) {
-            state.view.comboDisplay.textContent = `COMBO x${hitResult.combo}! 🔥`;
+            state.view.comboDisplay.innerHTML = `
+                <span class="material-symbols-outlined">local_fire_department</span>
+                <span>COMBO x${hitResult.combo}!</span>
+            `;
             state.view.comboDisplay.style.transform = "scale(1.15)";
             setTimeout(() => {
                 state.view.comboDisplay.style.transform = "scale(1)";
@@ -227,7 +246,10 @@ function triggerGameOver(reason) {
     state.view.modalHighScore.textContent = stats.highScore;
 
     if (isRecord) {
-        state.view.modalTitle.textContent = "NOVO RECORDE! 🏆";
+        state.view.modalTitle.innerHTML = `
+            <span class="material-symbols-outlined">trophy</span>
+            <span>NOVO RECORDE!</span>
+        `;
         state.view.modalMessage.textContent = "Incrível! O Dante está dançando de tanta alegria!";
         state.view.modalDanteImg.src = "./src/img/enemy-dancing.gif";
     } else {
@@ -238,7 +260,10 @@ function triggerGameOver(reason) {
 
     state.view.modal.classList.remove("hidden");
     state.view.initButton.disabled = false;
-    state.view.initButton.textContent = "▶ REINICIAR";
+    state.view.initButton.innerHTML = `
+        <span class="material-symbols-outlined">replay</span>
+        <span>REINICIAR</span>
+    `;
 }
 
 function startMatch() {
@@ -261,6 +286,10 @@ function startMatch() {
     state.view.comboDisplay.textContent = "";
     state.view.modal.classList.add("hidden");
     state.view.initButton.disabled = true;
+    state.view.initButton.innerHTML = `
+        <span class="material-symbols-outlined">play_arrow</span>
+        <span>JOGANDO...</span>
+    `;
 
     updateLoreDisplay(GAME_LEVELS[0]);
     renderLives(state.engines.score.lives);

@@ -8,7 +8,9 @@
     <meta name="theme-color" content="#1D4ED8">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Fontes e Ícones Oficiais do Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Wix+Madefor+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
     <link rel="stylesheet" href="./src/styles/reset.css">
     <link rel="stylesheet" href="./src/styles/main.css">
     <title>Dante Dash - Arcade Edition</title>
@@ -21,34 +23,45 @@
                 <h1 class="banner__title is-golden">Dante Dash</h1>
             </div>
 
-            <!-- HUD de Status Arcade -->
+            <!-- HUD de Status Arcade Responsivo com Ícones do Google Fonts (Caber tudo na tela) -->
             <div class="banner__scoreboard">
-                <div class="score-card">
+                <div class="score-card" title="Tempo restante">
+                    <span class="material-symbols-outlined score-icon">schedule</span>
                     <span class="score-label">TEMPO</span>
                     <span class="score-value is-golden" id="time-left">60</span>
                 </div>
-                <div class="score-card">
+                <div class="score-card" title="Pontuação">
+                    <span class="material-symbols-outlined score-icon">stars</span>
                     <span class="score-label">PONTOS</span>
                     <span class="score-value" id="score">0</span>
                 </div>
-                <div class="score-card">
+                <div class="score-card" title="Nível atual">
+                    <span class="material-symbols-outlined score-icon">trending_up</span>
                     <span class="score-label">NÍVEL</span>
                     <span class="score-value is-golden" id="level">1</span>
                 </div>
-                <div class="score-card">
+                <div class="score-card" title="Maior Recorde">
+                    <span class="material-symbols-outlined score-icon">trophy</span>
                     <span class="score-label">RECORDE</span>
                     <span class="score-value is-highlight" id="high-score">0</span>
                 </div>
-                <div class="score-card">
+                <div class="score-card" title="Vidas">
+                    <span class="material-symbols-outlined score-icon">favorite</span>
                     <span class="score-label">VIDAS</span>
-                    <span class="score-value" id="lives">❤️❤️❤️</span>
+                    <div class="score-value" id="lives"></div>
                 </div>
             </div>
 
-            <!-- Barra Encaixada de Botões 8-Bits (Canetinhas do Dante: Azul Royal e Vermelho) -->
+            <!-- Barra Encaixada de Botões 8-Bits (Cores das Canetinhas do Dante com Ícones Google Fonts) -->
             <div class="banner__controls-dock">
-                <button class="pixel-btn btn-blue" id="initButton" onclick="startGame()">[ ▶ INICIAR ]</button>
-                <button class="pixel-btn btn-red" id="musicButton" onclick="toggleMusic()">[ ♫ MÚSICA: OFF ]</button>
+                <button class="pixel-btn btn-blue" id="initButton" onclick="startGame()">
+                    <span class="material-symbols-outlined">play_arrow</span>
+                    <span>INICIAR</span>
+                </button>
+                <button class="pixel-btn btn-red" id="musicButton" onclick="toggleMusic()">
+                    <span class="material-symbols-outlined">volume_off</span>
+                    <span>MÚSICA: OFF</span>
+                </button>
             </div>
 
             <!-- Faixa de Narrativa / Evolução de História -->
@@ -115,7 +128,10 @@
                 <p>Maior Combo: <span id="final-combo" class="is-highlight">x1</span></p>
                 <p>Recorde Geral: <span id="modal-high-score">0</span></p>
             </div>
-            <button class="pixel-btn btn-blue" onclick="restartGame()">[ 🔄 JOGAR NOVAMENTE ]</button>
+            <button class="pixel-btn btn-blue" onclick="restartGame()">
+                <span class="material-symbols-outlined">replay</span>
+                <span>JOGAR NOVAMENTE</span>
+            </button>
         </div>
     </div>
 

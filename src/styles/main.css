@@ -1,7 +1,7 @@
 /* ==========================================================================
-   Dante Dash - Arcade Edition Stylesheet v2.2
-   Layout Responsivo sem rolagem horizontal, Estilo CRT 8-Bits
-   Cores dos botões inspiradas nas canetinhas do Dante (Azul Royal e Vermelho)
+   Dante Dash - Arcade Edition Stylesheet v2.3
+   Tela Limpa (Sem Ruído), 100% Responsivo, Ícones Google Fonts
+   Botões 8-Bits com Cores das Canetinhas do Dante (Azul Royal e Vermelho)
    Engenharia de Software: Juliana Chaves Palm
    ========================================================================== */
 
@@ -16,7 +16,7 @@ html, body {
     width: 100%;
     max-width: 100%;
     overflow-x: hidden;
-    background-color: #060609;
+    background-color: #08080C;
     color: #FFFFFF;
     font-family: 'Wix Madefor Display', sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -37,45 +37,48 @@ a {
 
 .is-golden {
     color: #FFD700;
-    text-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
 }
 
 .is-highlight {
     color: #00E5FF;
-    text-shadow: 0 0 8px rgba(0, 229, 255, 0.5);
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.4);
 }
 
-/* Moldura Centralizada do Gabinete Arcade (Sem rolagem horizontal) */
+/* Moldura Centralizada do Gabinete Arcade Limpo (Sem ruído / sem scanlines) */
 .arcade-cabinet {
     width: 100%;
-    max-width: 580px;
+    max-width: 540px;
     margin: 0 auto;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    background: radial-gradient(circle at center, #161622 0%, #0A0A0F 100%);
-    border-left: 2px solid #222233;
-    border-right: 2px solid #222233;
-    box-shadow: 0 0 40px rgba(0, 0, 0, 0.9);
+    background: radial-gradient(circle at center, #151522 0%, #0A0A0F 100%);
+    border-left: 2px solid #20202E;
+    border-right: 2px solid #20202E;
+    box-shadow: 0 0 35px rgba(0, 0, 0, 0.85);
     position: relative;
 }
 
-/* Efeito CRT Scanlines sutil */
-.arcade-cabinet::before {
-    content: " ";
-    display: block;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.18) 50%);
-    background-size: 100% 4px;
-    z-index: 99;
-    pointer-events: none;
-    opacity: 0.35;
+/* Ícones Oficiais do Google Fonts (Material Symbols Outlined) */
+.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 1.15rem;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
 
 /* Topo / Banner Arcade */
@@ -84,19 +87,18 @@ a {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.85rem 0.5rem;
+    padding: 0.75rem 0.5rem 0.5rem;
     font-family: "Press Start 2P", monospace;
-    background: linear-gradient(180deg, #1C1C28 0%, #111118 100%);
+    background: linear-gradient(180deg, #181824 0%, #0F0F16 100%);
     border-bottom: 3px solid #1D4ED8;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
 }
 
 .banner__logo {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.45rem;
 }
 
 .banner__img {
-    height: 48px;
+    height: 46px;
     margin-right: 10px;
     filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.5));
     animation: float 2.5s ease-in-out infinite;
@@ -104,49 +106,83 @@ a {
 
 @keyframes float {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-5px); }
+    50% { transform: translateY(-4px); }
 }
 
 .banner__title {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
     letter-spacing: 1px;
 }
 
-/* Placar Arcade Modular */
+/* Placar Arcade Modular em Grid 5 Colunas (Cabe perfeitamente em qualquer tela) */
 .banner__scoreboard {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    margin: 0.3rem 0;
-    width: 100%;
-    max-width: 520px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.35rem;
+    width: 95%;
+    max-width: 500px;
+    margin: 0.35rem auto;
 }
 
 .score-card {
-    background: rgba(0, 0, 0, 0.75);
-    border: 2px solid #282838;
+    background: rgba(10, 10, 16, 0.9);
+    border: 1px solid #28283C;
     border-radius: 4px;
-    padding: 0.35rem 0.5rem;
+    padding: 0.35rem 0.15rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-width: 76px;
-    flex: 1 1 76px;
-    max-width: 95px;
+    justify-content: center;
+    min-width: 0;
+    text-align: center;
 }
 
+.score-icon {
+    font-size: 1rem !important;
+    margin-bottom: 0.15rem;
+}
+
+.score-card:nth-child(1) .score-icon { color: #FFD700; }
+.score-card:nth-child(2) .score-icon { color: #38BDF8; }
+.score-card:nth-child(3) .score-icon { color: #A78BFA; }
+.score-card:nth-child(4) .score-icon { color: #F59E0B; }
+.score-card:nth-child(5) .score-icon { color: #EF4444; }
+
 .score-label {
-    font-size: 0.5rem;
+    font-size: 0.46rem;
     color: #94A3B8;
     margin-bottom: 0.2rem;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
 }
 
 .score-value {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-family: "Press Start 2P", monospace;
+    white-space: nowrap;
+}
+
+/* Vidas com Ícones Google Fonts */
+.heart-container {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+}
+
+.heart-icon {
+    font-size: 0.78rem !important;
+    transition: transform 0.15s ease;
+}
+
+.heart-icon.filled {
+    color: #EF4444 !important;
+    font-variation-settings: 'FILL' 1;
+}
+
+.heart-icon.empty {
+    color: #4B5563 !important;
+    font-variation-settings: 'FILL' 0;
 }
 
 /* Barra de Controles Encaixada (Docked 8-Bits) */
@@ -154,22 +190,22 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.85rem;
-    width: 92%;
+    gap: 0.75rem;
+    width: 95%;
     max-width: 440px;
-    margin: 0.5rem auto 0.25rem;
-    padding: 0.45rem;
+    margin: 0.45rem auto 0.25rem;
+    padding: 0.4rem;
     background: #0B0B12;
-    border: 2px solid #26263A;
+    border: 2px solid #242436;
     border-radius: 4px;
     box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.8);
 }
 
-/* Botões 8-Bits Estilo Canetinhas do Dante */
+/* Botões 8-Bits Estilo Canetinhas do Dante com Ícones Google Fonts */
 .pixel-btn {
     font-family: "Press Start 2P", monospace;
-    font-size: 0.65rem;
-    padding: 0.65rem 1rem;
+    font-size: 0.62rem;
+    padding: 0.6rem 0.9rem;
     cursor: pointer;
     border: none;
     user-select: none;
@@ -177,8 +213,13 @@ a {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 0.35rem;
     transition: transform 0.05s ease, filter 0.1s ease;
     border-radius: 2px;
+}
+
+.pixel-btn .material-symbols-outlined {
+    font-size: 0.95rem;
 }
 
 /* Botão Azul Canetinha Dante */
@@ -222,7 +263,7 @@ a {
 }
 
 .btn-red.is-playing {
-    box-shadow: inset -2px -2px 0px #450A0A, inset 2px 2px 0px #FCA5A5, 0 0 12px rgba(220, 38, 38, 0.7);
+    box-shadow: inset -2px -2px 0px #450A0A, inset 2px 2px 0px #FCA5A5, 0 0 10px rgba(220, 38, 38, 0.7);
     color: #FEF08A;
 }
 
@@ -230,13 +271,13 @@ a {
 .arcade-lore-bar {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
-    width: 92%;
+    gap: 0.5rem;
+    width: 95%;
     max-width: 440px;
     margin: 0.35rem auto 0;
     padding: 0.35rem 0.6rem;
-    background: rgba(0, 0, 0, 0.6);
-    border: 1px dashed #3A3A52;
+    background: rgba(0, 0, 0, 0.65);
+    border: 1px dashed #35354A;
     border-radius: 4px;
 }
 
@@ -244,8 +285,8 @@ a {
     background: #FFD700;
     color: #000000;
     font-family: "Press Start 2P", monospace;
-    font-size: 0.5rem;
-    padding: 2px 6px;
+    font-size: 0.48rem;
+    padding: 2px 5px;
     border-radius: 2px;
     font-weight: bold;
     white-space: nowrap;
@@ -254,18 +295,27 @@ a {
 .lore-text {
     color: #CBD5E1;
     font-family: 'Wix Madefor Display', sans-serif;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     line-height: 1.2;
 }
 
 .combo-display {
     height: 22px;
-    margin-top: 0.3rem;
-    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    font-size: 0.72rem;
     font-weight: bold;
     color: #00FF66;
     text-shadow: 0 0 10px rgba(0, 255, 102, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
     transition: transform 0.12s ease;
+}
+
+.combo-display .material-symbols-outlined {
+    font-size: 0.95rem;
+    color: #F97316;
 }
 
 .level-up-pulse {
@@ -275,7 +325,7 @@ a {
 
 @keyframes flashLevel {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.25); text-shadow: 0 0 20px #FFD700; }
+    50% { transform: scale(1.2); text-shadow: 0 0 16px #FFD700; }
 }
 
 /* Painel da Arena 3x3 */
@@ -284,24 +334,24 @@ a {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 1rem 0.5rem;
+    padding: 0.75rem 0.5rem;
     width: 100%;
 }
 
 .panel {
-    padding: 1rem;
+    padding: 0.85rem;
     background-image: url('../img/wall.png');
     background-size: cover;
     background-position: center;
-    border: 4px solid #1D4ED8;
+    border: 3px solid #1D4ED8;
     border-radius: 8px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.9), inset 0 0 20px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.9), inset 0 0 15px rgba(0, 0, 0, 0.8);
     touch-action: manipulation;
 }
 
 .panel__row {
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    gap: 0.45rem;
+    margin-bottom: 0.45rem;
 }
 
 .panel__row:last-child {
@@ -310,10 +360,10 @@ a {
 
 .panel__square {
     position: relative;
-    width: 88px;
-    height: 88px;
-    background: #181822;
-    border: 3px solid #323246;
+    width: 86px;
+    height: 86px;
+    background: #161620;
+    border: 2px solid #2D2D40;
     border-radius: 6px;
     cursor: pointer;
     overflow: hidden;
@@ -330,21 +380,21 @@ a {
     position: absolute;
     bottom: 3px;
     right: 5px;
-    font-size: 0.6rem;
+    font-size: 0.58rem;
     color: #64748B;
     font-family: "Press Start 2P", monospace;
     pointer-events: none;
 }
 
-/* Estado de Inimigo / Alvo */
+/* Estado de Inimigo / Alvo com Fundo 100% Transparente */
 .panel__square.enemy {
-    background-color: #2D1A2C;
+    background-color: transparent;
     background-image: url("../img/enemy-fighting.gif");
-    background-size: 82%;
+    background-size: 88%;
     background-repeat: no-repeat;
     background-position: center;
     border-color: #DC2626;
-    box-shadow: 0 0 16px rgba(220, 38, 38, 0.6);
+    box-shadow: 0 0 16px rgba(220, 38, 38, 0.7);
     animation: pulseSquare 0.4s alternate infinite ease-in-out;
 }
 
@@ -360,12 +410,12 @@ a {
 
 @keyframes flashGreen {
     0% { background-color: #FFFFFF; }
-    100% { background-color: #181822; }
+    100% { background-color: transparent; }
 }
 
 .panel__hint {
-    margin-top: 0.75rem;
-    font-size: 0.75rem;
+    margin-top: 0.65rem;
+    font-size: 0.72rem;
     color: #8888A0;
     text-align: center;
     padding: 0 0.5rem;
@@ -395,58 +445,67 @@ a {
 
 .modal__card {
     background: #14141F;
-    border: 4px solid #FFD700;
+    border: 3px solid #FFD700;
     border-radius: 8px;
-    padding: 1.75rem;
+    padding: 1.5rem;
     text-align: center;
-    max-width: 400px;
+    max-width: 380px;
     width: 90%;
-    box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+    box-shadow: 0 0 35px rgba(255, 215, 0, 0.35);
     font-family: "Press Start 2P", monospace;
 }
 
 .modal__img {
-    height: 90px;
-    margin-bottom: 1rem;
-    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5));
+    height: 85px;
+    margin-bottom: 0.85rem;
+    filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.45));
 }
 
 .modal__title {
-    font-size: 1.1rem;
-    margin-bottom: 0.6rem;
+    font-size: 1.05rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+}
+
+.modal__title .material-symbols-outlined {
+    font-size: 1.3rem;
+    color: #FFD700;
 }
 
 .modal__text {
     font-family: 'Wix Madefor Display', sans-serif;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     color: #CBD5E1;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1.15rem;
 }
 
 .modal__stats {
     background: #0B0B12;
-    border: 2px solid #282838;
+    border: 1px solid #282838;
     border-radius: 4px;
-    padding: 0.85rem;
-    margin-bottom: 1.25rem;
-    font-size: 0.68rem;
-    line-height: 1.8;
+    padding: 0.75rem;
+    margin-bottom: 1.15rem;
+    font-size: 0.65rem;
+    line-height: 1.7;
 }
 
 /* Rodapé Oficial de Autoria */
 .social-media {
     width: 100%;
-    padding: 1rem 0.75rem;
+    padding: 0.85rem 0.75rem;
     background-color: #07070B;
-    border-top: 1px solid #1E1E2C;
+    border-top: 1px solid #1A1A26;
     color: #888899;
     text-align: center;
-    font-size: 0.78rem;
+    font-size: 0.75rem;
 }
 
 .social-media__tribute {
-    line-height: 1.5;
-    margin-bottom: 0.4rem;
+    line-height: 1.45;
+    margin-bottom: 0.35rem;
 }
 
 .social-media__tribute strong {
@@ -458,8 +517,8 @@ a {
     align-items: center;
     justify-content: center;
     list-style: none;
-    gap: 1.5rem;
-    margin-top: 0.4rem;
+    gap: 1.25rem;
+    margin-top: 0.35rem;
 }
 
 .social-media__link {
@@ -471,12 +530,15 @@ a {
     color: #FFD700;
 }
 
-/* Adaptação Mobile */
-@media (max-width: 440px) {
+/* Ajustes Responsivos para Dispositivos Pequenos (Abaixo de 400px) */
+@media (max-width: 400px) {
     .banner__title { font-size: 1rem; }
-    .panel__square { width: 74px; height: 74px; }
-    .score-card { min-width: 60px; padding: 0.25rem 0.35rem; }
-    .score-label { font-size: 0.45rem; }
-    .score-value { font-size: 0.7rem; }
-    .pixel-btn { font-size: 0.55rem; padding: 0.55rem 0.75rem; }
+    .banner__scoreboard { gap: 0.2rem; }
+    .score-card { padding: 0.25rem 0.1rem; }
+    .score-label { font-size: 0.4rem; }
+    .score-value { font-size: 0.65rem; }
+    .score-icon { font-size: 0.85rem !important; }
+    .heart-icon { font-size: 0.7rem !important; }
+    .panel__square { width: 72px; height: 72px; }
+    .pixel-btn { font-size: 0.52rem; padding: 0.5rem 0.7rem; }
 }
