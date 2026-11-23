@@ -3,53 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/jpeg" href="./src/img/favicon.jpg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Wix+Madefor+Display:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./src/styles/reset.css">
     <link rel="stylesheet" href="./src/styles/main.css">
-    <title>Dante Dash</title>
+    <title>Dante Dash - Arcade Edition</title>
 </head>
 <body>
     <header class="banner">
         <div class="banner__logo is-flex">
-            <img class="banner__img" src="./src/img/player.png" alt="Logo Dante Dash">
+            <img class="banner__img" src="./src/img/player.png" alt="Herói Dante Dash">
             <h1 class="banner__title is-golden">Dante Dash</h1>
         </div>
-        <div class="banner__pannel">
-                <h2 class="banner__subtitle">Time Left: <span id="time-left">0</span></h2>
-                <h2 class="banner__subtitle">Your Score: <span id="score">0</span></h2>
-            <div class="banner__start">
-                <button class="banner__button" id="initButton" onclick="startGame()">Start</button>
+
+        <div class="banner__scoreboard">
+            <div class="score-card">
+                <span class="score-label">Tempo</span>
+                <span class="score-value is-golden" id="time-left">60</span>
+            </div>
+            <div class="score-card">
+                <span class="score-label">Placar</span>
+                <span class="score-value" id="score">0</span>
+            </div>
+            <div class="score-card">
+                <span class="score-label">Recorde</span>
+                <span class="score-value is-highlight" id="high-score">0</span>
+            </div>
+            <div class="score-card">
+                <span class="score-label">Vidas</span>
+                <span class="score-value" id="lives">❤️❤️❤️</span>
             </div>
         </div>
-    </header>
-    <main class="panel">
-        <div class="panel__row is-flex">
-            <div class="panel__square" id="1"></div>
-            <div class="panel__square" id="2"></div>
-            <div class="panel__square" id="3"></div>
-        </div>
-        <div class="panel__row is-flex">
-            <div class="panel__square" id="4"></div>
-            <div class="panel__square" id="5"></div>
-            <div class="panel__square" id="6"></div>
-        </div>
-        <div class="panel__row is-flex">
-            <div class="panel__square" id="7"></div>
-            <div class="panel__square" id="8"></div>
-            <div class="panel__square" id="9"></div>
+
+        <div class="banner__controls">
+            <button class="banner__button primary" id="initButton" onclick="startGame()">▶ Iniciar</button>
+            <button class="banner__button secondary" id="musicButton" onclick="toggleMusic()">🎵 Música: Off</button>
         </div>
 
+        <div id="combo-display" class="combo-display"></div>
+    </header>
+
+    <main class="panel-container">
+        <div class="panel">
+            <div class="panel__row is-flex">
+                <div class="panel__square" id="1" data-key="1"><span class="key-hint">1</span></div>
+                <div class="panel__square" id="2" data-key="2"><span class="key-hint">2</span></div>
+                <div class="panel__square" id="3" data-key="3"><span class="key-hint">3</span></div>
+            </div>
+            <div class="panel__row is-flex">
+                <div class="panel__square" id="4" data-key="4"><span class="key-hint">4</span></div>
+                <div class="panel__square" id="5" data-key="5"><span class="key-hint">5</span></div>
+                <div class="panel__square" id="6" data-key="6"><span class="key-hint">6</span></div>
+            </div>
+            <div class="panel__row is-flex">
+                <div class="panel__square" id="7" data-key="7"><span class="key-hint">7</span></div>
+                <div class="panel__square" id="8" data-key="8"><span class="key-hint">8</span></div>
+                <div class="panel__square" id="9" data-key="9"><span class="key-hint">9</span></div>
+            </div>
+        </div>
+        <p class="panel__hint">Dica: jogue tocando na tela ou use as teclas numéricas de 1 a 9 no teclado!</p>
     </main>
+
+    <!-- Modal Arcade de Game Over -->
+    <div id="game-over-modal" class="modal hidden">
+        <div class="modal__card">
+            <img id="modal-dante-img" class="modal__img" src="./src/img/enemy-dancing.gif" alt="Dante Comemorando">
+            <h2 id="modal-title" class="modal__title is-golden">FIM DE JOGO!</h2>
+            <p id="modal-message" class="modal__text">Você mandou bem demais!</p>
+            <div class="modal__stats">
+                <p>Pontuação: <span id="final-score" class="is-golden">0</span></p>
+                <p>Maior Combo: <span id="final-combo" class="is-highlight">x1</span></p>
+                <p>Recorde Geral: <span id="modal-high-score">0</span></p>
+            </div>
+            <button class="banner__button primary" onclick="restartGame()">Jogar Novamente 🔄</button>
+        </div>
+    </div>
+
     <footer class="social-media">
-        <p class="social-media__message">Desenvolvido por Juliana Chaves Palm</p>
-        <ul class="social-media__links" >
-                <li class="social-media__item">
-                    <a href="mailto:julianachavespalm@gmail.com" class="social-media__link"><i class="fa-regular fa-envelope" aria-disabled="true"></i> E-mail</a>
+        <p class="social-media__tribute">
+            Arte do Herói por <strong>Dante Chaves Martino</strong> (aos 4 anos) · 
+            Trilha Sonora por <strong>Denis Martino</strong> · 
+            Engenharia por <strong>Juliana Chaves Palm</strong>
+        </p>
+        <ul class="social-media__links">
+            <li class="social-media__item">
+                <a href="https://github.com/julianachavespalm/dante-dash" target="_blank" rel="noopener" class="social-media__link">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
             </li>
-                <li class="social-media__item">
-                    <a href="https://www.linkedin.com/in/julianachavespalm" class="social-media__link"><i class="fa-brands fa-linkedin" aria-disabled="true"></i> LinkedIn</a>
+            <li class="social-media__item">
+                <a href="https://www.linkedin.com/in/julianachavespalm" target="_blank" rel="noopener" class="social-media__link">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
             </li>
         </ul>
     </footer>
+
     <script src="https://kit.fontawesome.com/e0954b0c75.js" crossorigin="anonymous"></script>
     <script src="./src/scripts/engine.js" defer></script>
 </body>
