@@ -1,10 +1,15 @@
 /**
- * Dante Dash - Engine de Jogo Arcade
+ * Dante Dash - Engine de Jogo Arcade v2.1
+ * Arquitetura Desacoplada: FSM, ScoreEngine, SpawnEngine e Web Audio API.
  * 
  * Desenho do Personagem: Dante Chaves Martino (aos 4 anos)
- * Trilha Sonora: Denis Martino
- * Engenharia: Juliana Chaves Palm
+ * Trilha Sonora: Denis Martino Cota
+ * Engenharia de Software: Juliana Chaves Palm
  */
+
+import { ScoreEngine } from "./core/scoreEngine.js";
+import { SpawnEngine } from "./core/spawnEngine.js";
+import { GameStateManager, States } from "./core/gameState.js";
 
 const state = {
     view: {
@@ -24,55 +29,47 @@ const state = {
         finalCombo: document.querySelector("#final-combo"),
         modalHighScore: document.querySelector("#modal-high-score"),
     },
-    values: {
-        gameVelocity: 1000,
-        minVelocity: 450,
-        hitPosition: null,
-        score: 0,
-        highScore: parseInt(localStorage.getItem("dante_dash_high_score") || "0", 10),
-        currentTime: 60,
-        lives: 3,
-        combo: 0,
-        maxCombo: 0,
+    engines: {
+        score: null,
+        spawn: null,
+        fsm: null,
     },
-    actions: {
-        timerId: null,
-        countDownTimerId: null,
-        gameStarted: false,
-        isMusicPlaying: false,
+    timers: {
+        spawnTimerId: null,
+        clockTimerId: null,
+        currentTime: 60,
+        hitPosition: null,
     },
     audio: {
         bgMusic: new Audio("./src/audios/trilha-metal__denis-martino.m4a"),
         hitSound: new Audio("./src/audios/hit.m4a"),
+        isMusicPlaying: false,
     }
 };
 
 // Configurações de Áudio
 state.audio.bgMusic.loop = true;
 state.audio.bgMusic.volume = 0.25;
-state.audio.hitSound.volume = 0.4;
 
-function playSound(audioName) {
-    try {
-        if (audioName === "hit") {
-            const soundClone = state.audio.hitSound.cloneNode();
-            soundClone.volume = 0.35;
-            soundClone.play().catch(() => {});
-        }
-    } catch (e) {
-        // Silencia erros de autoplay do navegador
+function playSound(type) {
+    if (type === "hit") {
+        try {
+            const clone = state.audio.hitSound.cloneNode();
+            clone.volume = 0.35;
+            clone.play().catch(() => {});
+        } catch (_) {}
     }
 }
 
 function toggleMusic() {
-    if (state.actions.isMusicPlaying) {
+    if (state.audio.isMusicPlaying) {
         state.audio.bgMusic.pause();
-        state.actions.isMusicPlaying = false;
+        state.audio.isMusicPlaying = false;
         state.view.musicButton.textContent = "🎵 Música: Off";
         state.view.musicButton.classList.remove("is-golden");
     } else {
         state.audio.bgMusic.play().then(() => {
-            state.actions.isMusicPlaying = true;
+            state.audio.isMusicPlaying = true;
             state.view.musicButton.textContent = "🔊 Música: On";
             state.view.musicButton.classList.add("is-golden");
         }).catch(() => {
@@ -81,124 +78,107 @@ function toggleMusic() {
     }
 }
 
-function renderLives() {
+function renderLives(livesCount) {
     let hearts = "";
-    for (let i = 0; i < state.values.lives; i++) {
+    for (let i = 0; i < livesCount; i++) {
         hearts += "❤️";
     }
     state.view.lives.textContent = hearts || "💀";
 }
 
-function updateScore(points) {
-    state.values.score += points;
-    state.view.score.textContent = state.values.score;
+function spawnNextEnemy() {
+    if (!state.engines.fsm.is(States.PLAYING)) return;
 
-    if (state.values.score > state.values.highScore) {
-        state.values.highScore = state.values.score;
-        localStorage.setItem("dante_dash_high_score", state.values.highScore.toString());
-        state.view.highScore.textContent = state.values.highScore;
+    state.view.squares.forEach((sq) => sq.classList.remove("enemy"));
+
+    const nextPos = state.engines.spawn.getNextPosition();
+    const squareElement = document.getElementById(nextPos.toString());
+    if (squareElement) {
+        squareElement.classList.add("enemy");
+        state.timers.hitPosition = nextPos.toString();
     }
 }
 
-function updateCombo(isHit) {
-    if (isHit) {
-        state.values.combo++;
-        if (state.values.combo > state.values.maxCombo) {
-            state.values.maxCombo = state.values.combo;
-        }
+function rescheduleSpawn() {
+    clearInterval(state.timers.spawnTimerId);
+    if (!state.engines.fsm.is(States.PLAYING)) return;
 
-        if (state.values.combo >= 2) {
-            state.view.comboDisplay.textContent = `COMBO x${state.values.combo}! 🔥`;
-            state.view.comboDisplay.style.transform = "scale(1.2)";
-            setTimeout(() => {
-                state.view.comboDisplay.style.transform = "scale(1)";
-            }, 150);
-        }
-    } else {
-        state.values.combo = 0;
-        state.view.comboDisplay.textContent = "";
-    }
+    const velocity = state.engines.spawn.calculateVelocity(state.engines.score.score);
+    state.timers.spawnTimerId = setInterval(spawnNextEnemy, velocity);
 }
 
-function randomSquare() {
-    state.view.squares.forEach((square) => {
-        square.classList.remove("enemy");
-    });
-
-    let randomNumber = Math.floor(Math.random() * state.view.squares.length);
-    let randomSquare = state.view.squares[randomNumber];
-    randomSquare.classList.add("enemy");
-    state.values.hitPosition = randomSquare.id;
-}
-
-function speedUpGame() {
-    // Acelera gradualmente o jogo conforme a pontuação sobe
-    const newVelocity = Math.max(state.values.minVelocity, 1000 - (state.values.score * 15));
-    if (newVelocity !== state.values.gameVelocity) {
-        state.values.gameVelocity = newVelocity;
-        clearInterval(state.actions.timerId);
-        state.actions.timerId = setInterval(randomSquare, state.values.gameVelocity);
-    }
-}
-
-function hitSquare(squareId) {
-    if (!state.actions.gameStarted) return;
+function handleSquareHit(squareId) {
+    if (!state.engines.fsm.is(States.PLAYING)) return;
 
     const squareElement = document.getElementById(squareId);
 
-    if (squareId === state.values.hitPosition) {
+    if (squareId === state.timers.hitPosition) {
         // Acerto!
-        updateCombo(true);
-        const multiplier = Math.min(state.values.combo, 4);
-        const pointsAwarded = 10 * multiplier;
-        updateScore(pointsAwarded);
+        const hitResult = state.engines.score.registerHit(10);
+        state.view.score.textContent = hitResult.score;
+        state.view.highScore.textContent = hitResult.highScore;
 
+        if (hitResult.isRecord) {
+            localStorage.setItem("dante_dash_high_score", hitResult.highScore.toString());
+        }
+
+        if (hitResult.combo >= 2) {
+            state.view.comboDisplay.textContent = `COMBO x${hitResult.combo}! 🔥`;
+            state.view.comboDisplay.style.transform = "scale(1.2)";
+            setTimeout(() => {
+                state.view.comboDisplay.style.transform = "scale(1)";
+            }, 120);
+        }
+
+        playSound("hit");
         squareElement.classList.add("hit-success");
         setTimeout(() => squareElement.classList.remove("hit-success"), 150);
 
-        playSound("hit");
-        state.values.hitPosition = null;
+        state.timers.hitPosition = null;
         squareElement.classList.remove("enemy");
 
-        speedUpGame();
+        rescheduleSpawn();
     } else {
-        // Erro
-        updateCombo(false);
-        state.values.lives--;
-        renderLives();
+        // Erro!
+        const missResult = state.engines.score.registerMiss();
+        renderLives(missResult.livesRemaining);
+        state.view.comboDisplay.textContent = "";
 
-        if (state.values.lives <= 0) {
-            endGame("Sem Vidas!");
+        if (missResult.isGameOver) {
+            triggerGameOver("Sem Vidas!");
         }
     }
 }
 
-function countDown() {
-    state.values.currentTime--;
-    state.view.timeLeft.textContent = state.values.currentTime;
+function onClockTick() {
+    if (!state.engines.fsm.is(States.PLAYING)) return;
 
-    if (state.values.currentTime <= 0) {
-        endGame("Tempo Esgotado!");
+    state.timers.currentTime--;
+    state.view.timeLeft.textContent = state.timers.currentTime;
+
+    if (state.timers.currentTime <= 0) {
+        triggerGameOver("Tempo Esgotado!");
     }
 }
 
-function endGame(reason) {
-    clearInterval(state.actions.countDownTimerId);
-    clearInterval(state.actions.timerId);
-    state.actions.gameStarted = false;
-    state.values.hitPosition = null;
+function triggerGameOver(reason) {
+    if (!state.engines.fsm.canTransitionTo(States.GAME_OVER)) return;
+    state.engines.fsm.transitionTo(States.GAME_OVER, { reason });
 
-    state.view.squares.forEach((square) => {
-        square.classList.remove("enemy");
-    });
+    clearInterval(state.timers.clockTimerId);
+    clearInterval(state.timers.spawnTimerId);
+    state.timers.hitPosition = null;
 
-    const isNewRecord = state.values.score >= state.values.highScore && state.values.score > 0;
+    state.view.squares.forEach((sq) => sq.classList.remove("enemy"));
 
-    state.view.finalScore.textContent = state.values.score;
-    state.view.finalCombo.textContent = `x${state.values.maxCombo}`;
-    state.view.modalHighScore.textContent = state.values.highScore;
+    const stats = state.engines.score.getStats();
+    const isRecord = stats.score >= stats.highScore && stats.score > 0;
 
-    if (isNewRecord) {
+    state.view.finalScore.textContent = stats.score;
+    state.view.finalCombo.textContent = `x${stats.maxCombo}`;
+    state.view.modalHighScore.textContent = stats.highScore;
+
+    if (isRecord) {
         state.view.modalTitle.textContent = "NOVO RECORDE! 🏆";
         state.view.modalMessage.textContent = "Incrível! O Dante está dançando de tanta alegria!";
         state.view.modalDanteImg.src = "./src/img/enemy-dancing.gif";
@@ -213,80 +193,109 @@ function endGame(reason) {
     state.view.initButton.textContent = "▶ Jogar Novamente";
 }
 
-function restartGame() {
-    state.view.modal.classList.add("hidden");
-    startGame();
-}
+function startMatch() {
+    clearInterval(state.timers.clockTimerId);
+    clearInterval(state.timers.spawnTimerId);
 
-function startGame() {
-    // Reseta estado
-    clearInterval(state.actions.countDownTimerId);
-    clearInterval(state.actions.timerId);
+    state.engines.score.reset();
+    state.engines.spawn.reset();
+    state.timers.currentTime = 60;
+    state.timers.hitPosition = null;
 
-    state.values.score = 0;
-    state.values.currentTime = 60;
-    state.values.lives = 3;
-    state.values.combo = 0;
-    state.values.maxCombo = 0;
-    state.values.gameVelocity = 1000;
-    state.values.hitPosition = null;
-    state.actions.gameStarted = true;
+    state.engines.fsm.transitionTo(States.PLAYING);
 
     state.view.score.textContent = "0";
     state.view.timeLeft.textContent = "60";
-    state.view.highScore.textContent = state.values.highScore;
+    state.view.highScore.textContent = state.engines.score.highScore;
     state.view.comboDisplay.textContent = "";
     state.view.modal.classList.add("hidden");
     state.view.initButton.disabled = true;
 
-    renderLives();
+    renderLives(state.engines.score.lives);
 
-    // Inicia timers
-    randomSquare();
-    state.actions.timerId = setInterval(randomSquare, state.values.gameVelocity);
-    state.actions.countDownTimerId = setInterval(countDown, 1000);
+    spawnNextEnemy();
+    rescheduleSpawn();
+    state.timers.clockTimerId = setInterval(onClockTick, 1000);
 
-    // Se a música estiver habilitada, garante reprodução
-    if (state.actions.isMusicPlaying) {
+    if (state.audio.isMusicPlaying) {
         state.audio.bgMusic.play().catch(() => {});
     }
 }
 
-function setupListeners() {
-    // Touch e Mouse nos Quadrados (PointerDown para zero lag no celular)
+function setupEvents() {
+    // PointerDown (Touch + Mouse sem delay)
     state.view.squares.forEach((square) => {
         square.addEventListener("pointerdown", (e) => {
             e.preventDefault();
-            hitSquare(square.id);
+            handleSquareHit(square.id);
         });
     });
 
-    // Mapeamento de Teclado no Desktop (1..9 e QWE/ASD/ZXC)
+    // Teclado
     const keyMap = {
         "1": "1", "2": "2", "3": "3",
         "4": "4", "5": "5", "6": "6",
         "7": "7", "8": "8", "9": "9",
         "q": "1", "w": "2", "e": "3",
         "a": "4", "s": "5", "d": "6",
-        "z": "7", "x": "8", "c": "9",
+        "z": "7", "x": "8", "c": "9"
     };
 
     window.addEventListener("keydown", (e) => {
         const key = e.key.toLowerCase();
         if (keyMap[key]) {
-            hitSquare(keyMap[key]);
-        } else if (key === " " && !state.actions.gameStarted) {
-            startGame();
+            handleSquareHit(keyMap[key]);
+        } else if (key === " " && !state.engines.fsm.is(States.PLAYING)) {
+            startMatch();
         } else if (key === "m") {
             toggleMusic();
         }
     });
+
+    // Pausa Automática ao minimizar ou trocar de aba
+    window.addEventListener("blur", () => {
+        if (state.engines.fsm.is(States.PLAYING)) {
+            state.engines.fsm.transitionTo(States.PAUSED);
+            clearInterval(state.timers.clockTimerId);
+            clearInterval(state.timers.spawnTimerId);
+            state.view.comboDisplay.textContent = "⏸️ Jogo Pausado";
+        }
+    });
+
+    window.addEventListener("focus", () => {
+        if (state.engines.fsm.is(States.PAUSED)) {
+            state.engines.fsm.transitionTo(States.PLAYING);
+            state.view.comboDisplay.textContent = "";
+            rescheduleSpawn();
+            state.timers.clockTimerId = setInterval(onClockTick, 1000);
+        }
+    });
+
+    // Expor métodos globais para os botões do HTML
+    window.startGame = startMatch;
+    window.restartGame = () => {
+        state.view.modal.classList.add("hidden");
+        startMatch();
+    };
+    window.toggleMusic = toggleMusic;
 }
 
-function init() {
-    state.view.highScore.textContent = state.values.highScore;
-    renderLives();
-    setupListeners();
+function registerServiceWorker() {
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+    }
 }
 
-window.addEventListener("DOMContentLoaded", init);
+function bootstrap() {
+    const savedHighScore = parseInt(localStorage.getItem("dante_dash_high_score") || "0", 10);
+    state.engines.score = new ScoreEngine(savedHighScore, 3);
+    state.engines.spawn = new SpawnEngine(1000, 450, 9);
+    state.engines.fsm = new GameStateManager(States.MENU);
+
+    state.view.highScore.textContent = savedHighScore;
+    renderLives(3);
+    setupEvents();
+    registerServiceWorker();
+}
+
+window.addEventListener("DOMContentLoaded", bootstrap);
