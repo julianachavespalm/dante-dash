@@ -1,13 +1,13 @@
 {
   "name": "dante-dash",
-  "version": "2.1.0",
-  "description": "Jogo arcade de reflexo e agilidade desenvolvido em JavaScript ES6 nativo com arquitetura FSM e Web Audio API.",
+  "version": "2.2.0",
+  "description": "Jogo arcade de reflexo e agilidade desenvolvido em JavaScript ES6 nativo com arquitetura FSM, Web Audio API procedural e PWA.",
   "type": "module",
   "scripts": {
     "test": "node --test tests/*.test.js",
     "test:coverage": "node --test --experimental-test-coverage tests/*.test.js"
   },
-  "keywords": ["game", "arcade", "javascript", "clean-architecture", "pwa", "fsm"],
+  "keywords": ["game", "arcade", "javascript", "clean-architecture", "pwa", "fsm", "web-audio-api"],
   "author": "Juliana Chaves Palm",
   "license": "MIT"
 }

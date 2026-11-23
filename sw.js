@@ -1,7 +1,7 @@
 /**
- * Service Worker - Dante Dash (Offline-First Cache)
+ * Service Worker - Dante Dash (Offline-First Cache) v2.2
  */
-const CACHE_NAME = "dante-dash-v2.1";
+const CACHE_NAME = "dante-dash-v2.2";
 const ASSETS_TO_CACHE = [
     "./",
     "./index.html",
@@ -9,6 +9,7 @@ const ASSETS_TO_CACHE = [
     "./src/styles/reset.css",
     "./src/styles/main.css",
     "./src/scripts/engine.js",
+    "./src/scripts/audio/synth.js",
     "./src/scripts/core/scoreEngine.js",
     "./src/scripts/core/spawnEngine.js",
     "./src/scripts/core/gameState.js",
@@ -17,7 +18,6 @@ const ASSETS_TO_CACHE = [
     "./src/img/enemy-dancing.gif",
     "./src/img/wall.png",
     "./src/img/favicon.jpg",
-    "./src/audios/hit.m4a",
     "./src/audios/trilha-metal__denis-martino.m4a"
 ];
 

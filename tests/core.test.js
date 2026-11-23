@@ -2,7 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 
 import { ScoreEngine } from "../src/scripts/core/scoreEngine.js";
-import { SpawnEngine } from "../src/scripts/core/spawnEngine.js";
+import { SpawnEngine, GAME_LEVELS } from "../src/scripts/core/spawnEngine.js";
 import { GameStateManager, States } from "../src/scripts/core/gameState.js";
 
 describe("ScoreEngine - Regras de Pontuação, Combo e Vidas", () => {
@@ -74,21 +74,40 @@ describe("ScoreEngine - Regras de Pontuação, Combo e Vidas", () => {
     });
 });
 
-describe("SpawnEngine - Temporização Adaptativa e Sorteio", () => {
-    it("deve acelerar a velocidade conforme a pontuação sobe", () => {
-        const spawn = new SpawnEngine(1000, 450, 9);
-        const v0 = spawn.calculateVelocity(0);
-        assert.equal(v0, 1000);
+describe("SpawnEngine - Temporização Adaptativa em 5 Níveis e Sorteio", () => {
+    it("deve iniciar calmo no Nível 1 (1400ms) e progredir até o Nível 5 (450ms)", () => {
+        const spawn = new SpawnEngine();
+        
+        // Nível 1: Começo calmo
+        const lvl1 = spawn.calculateLevel(0);
+        assert.equal(lvl1.level, 1);
+        assert.equal(lvl1.velocity, 1400);
 
-        const v100 = spawn.calculateVelocity(100);
-        assert.equal(v100, 850);
+        // Nível 2: 30 pontos
+        const lvl2 = spawn.calculateLevel(30);
+        assert.equal(lvl2.level, 2);
+        assert.equal(lvl2.velocity, 1100);
+        assert.equal(lvl2.isLevelUp, true);
 
-        const vHigh = spawn.calculateVelocity(1000);
-        assert.equal(vHigh, 450); // Bateu no mínimo configurado
+        // Nível 3: 80 pontos
+        const lvl3 = spawn.calculateLevel(80);
+        assert.equal(lvl3.level, 3);
+        assert.equal(lvl3.velocity, 850);
+        assert.equal(lvl3.isLevelUp, true);
+
+        // Nível 4: 150 pontos
+        const lvl4 = spawn.calculateLevel(150);
+        assert.equal(lvl4.level, 4);
+        assert.equal(lvl4.velocity, 650);
+
+        // Nível 5: 250 pontos
+        const lvl5 = spawn.calculateLevel(250);
+        assert.equal(lvl5.level, 5);
+        assert.equal(lvl5.velocity, 450);
     });
 
     it("deve sortear posições válidas sem repetição imediata", () => {
-        const spawn = new SpawnEngine(1000, 450, 9);
+        const spawn = new SpawnEngine();
         const positions = [];
         for (let i = 0; i < 20; i++) {
             positions.push(spawn.getNextPosition());
@@ -101,6 +120,15 @@ describe("SpawnEngine - Temporização Adaptativa e Sorteio", () => {
                 assert.notEqual(positions[i], positions[i - 1], "Posição consecutiva não deve se repetir");
             }
         }
+    });
+
+    it("deve reiniciar o nível e a última posição no reset", () => {
+        const spawn = new SpawnEngine();
+        spawn.calculateLevel(100);
+        assert.equal(spawn.currentLevel, 3);
+        spawn.reset();
+        assert.equal(spawn.currentLevel, 1);
+        assert.equal(spawn.lastPosition, null);
     });
 });
 

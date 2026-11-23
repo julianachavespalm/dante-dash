@@ -1,24 +1,28 @@
 /**
- * Dante Dash - Engine de Jogo Arcade v2.1
- * Arquitetura Desacoplada: FSM, ScoreEngine, SpawnEngine e Web Audio API.
+ * Dante Dash - Engine de Jogo Arcade v2.2
+ * Arquitetura Desacoplada: FSM, ScoreEngine, SpawnEngine e Web Audio API Synth.
  * 
  * Desenho do Personagem: Dante Chaves Martino (aos 4 anos)
- * Trilha Sonora: Denis Martino Cota
+ * Trilha Sonora: Denis Martino
  * Engenharia de Software: Juliana Chaves Palm
  */
 
 import { ScoreEngine } from "./core/scoreEngine.js";
-import { SpawnEngine } from "./core/spawnEngine.js";
+import { SpawnEngine, GAME_LEVELS } from "./core/spawnEngine.js";
 import { GameStateManager, States } from "./core/gameState.js";
+import { RetroAudioSynth } from "./audio/synth.js";
 
 const state = {
     view: {
         squares: document.querySelectorAll(".panel__square"),
         timeLeft: document.querySelector("#time-left"),
         score: document.querySelector("#score"),
+        level: document.querySelector("#level"),
         highScore: document.querySelector("#high-score"),
         lives: document.querySelector("#lives"),
         comboDisplay: document.querySelector("#combo-display"),
+        loreTag: document.querySelector("#lore-tag"),
+        loreText: document.querySelector("#lore-text"),
         initButton: document.querySelector("#initButton"),
         musicButton: document.querySelector("#musicButton"),
         modal: document.querySelector("#game-over-modal"),
@@ -33,6 +37,7 @@ const state = {
         score: null,
         spawn: null,
         fsm: null,
+        synth: new RetroAudioSynth(),
     },
     timers: {
         spawnTimerId: null,
@@ -42,36 +47,55 @@ const state = {
     },
     audio: {
         bgMusic: new Audio("./src/audios/trilha-metal__denis-martino.m4a"),
-        hitSound: new Audio("./src/audios/hit.m4a"),
         isMusicPlaying: false,
     }
 };
 
-// Configurações de Áudio
+// Configurações da Trilha Sonora
 state.audio.bgMusic.loop = true;
-state.audio.bgMusic.volume = 0.25;
+state.audio.bgMusic.volume = 0.28;
 
-function playSound(type) {
+/**
+ * Pré-carregamento assíncrono e decodificação na GPU para eliminar lag de exibição dos sprites.
+ */
+async function preloadAssets() {
+    const assets = [
+        "./src/img/player.png",
+        "./src/img/enemy-fighting.gif",
+        "./src/img/enemy-dancing.gif",
+        "./src/img/wall.png"
+    ];
+    return Promise.all(assets.map(src => {
+        const img = new Image();
+        img.src = src;
+        return img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+    }));
+}
+
+function playSound(type, combo = 1) {
     if (type === "hit") {
-        try {
-            const clone = state.audio.hitSound.cloneNode();
-            clone.volume = 0.35;
-            clone.play().catch(() => {});
-        } catch (_) {}
+        state.engines.synth.playHit(combo);
+    } else if (type === "miss") {
+        state.engines.synth.playMiss();
+    } else if (type === "levelUp") {
+        state.engines.synth.playLevelUp();
+    } else if (type === "gameOver") {
+        state.engines.synth.playGameOver();
     }
 }
 
 function toggleMusic() {
+    state.engines.synth.init();
     if (state.audio.isMusicPlaying) {
         state.audio.bgMusic.pause();
         state.audio.isMusicPlaying = false;
-        state.view.musicButton.textContent = "🎵 Música: Off";
-        state.view.musicButton.classList.remove("is-golden");
+        state.view.musicButton.textContent = "♫ MÚSICA: OFF";
+        state.view.musicButton.classList.remove("is-playing");
     } else {
         state.audio.bgMusic.play().then(() => {
             state.audio.isMusicPlaying = true;
-            state.view.musicButton.textContent = "🔊 Música: On";
-            state.view.musicButton.classList.add("is-golden");
+            state.view.musicButton.textContent = "♫ MÚSICA: ON";
+            state.view.musicButton.classList.add("is-playing");
         }).catch(() => {
             console.log("Autoplay bloqueado pelo navegador até interação.");
         });
@@ -84,6 +108,18 @@ function renderLives(livesCount) {
         hearts += "❤️";
     }
     state.view.lives.textContent = hearts || "💀";
+}
+
+function updateLoreDisplay(levelData) {
+    if (state.view.level) {
+        state.view.level.textContent = levelData.level;
+    }
+    if (state.view.loreTag) {
+        state.view.loreTag.textContent = `FASE ${levelData.level}`;
+    }
+    if (state.view.loreText) {
+        state.view.loreText.textContent = levelData.story;
+    }
 }
 
 function spawnNextEnemy() {
@@ -103,8 +139,17 @@ function rescheduleSpawn() {
     clearInterval(state.timers.spawnTimerId);
     if (!state.engines.fsm.is(States.PLAYING)) return;
 
-    const velocity = state.engines.spawn.calculateVelocity(state.engines.score.score);
-    state.timers.spawnTimerId = setInterval(spawnNextEnemy, velocity);
+    const levelData = state.engines.spawn.calculateLevel(state.engines.score.score);
+    updateLoreDisplay(levelData);
+
+    if (levelData.isLevelUp) {
+        playSound("levelUp");
+        state.view.comboDisplay.textContent = `★ NÍVEL ${levelData.level}! ★`;
+        state.view.comboDisplay.classList.add("level-up-pulse");
+        setTimeout(() => state.view.comboDisplay.classList.remove("level-up-pulse"), 1200);
+    }
+
+    state.timers.spawnTimerId = setInterval(spawnNextEnemy, levelData.velocity);
 }
 
 function handleSquareHit(squareId) {
@@ -124,15 +169,15 @@ function handleSquareHit(squareId) {
 
         if (hitResult.combo >= 2) {
             state.view.comboDisplay.textContent = `COMBO x${hitResult.combo}! 🔥`;
-            state.view.comboDisplay.style.transform = "scale(1.2)";
+            state.view.comboDisplay.style.transform = "scale(1.15)";
             setTimeout(() => {
                 state.view.comboDisplay.style.transform = "scale(1)";
             }, 120);
         }
 
-        playSound("hit");
+        playSound("hit", hitResult.combo);
         squareElement.classList.add("hit-success");
-        setTimeout(() => squareElement.classList.remove("hit-success"), 150);
+        setTimeout(() => squareElement.classList.remove("hit-success"), 140);
 
         state.timers.hitPosition = null;
         squareElement.classList.remove("enemy");
@@ -140,6 +185,7 @@ function handleSquareHit(squareId) {
         rescheduleSpawn();
     } else {
         // Erro!
+        playSound("miss");
         const missResult = state.engines.score.registerMiss();
         renderLives(missResult.livesRemaining);
         state.view.comboDisplay.textContent = "";
@@ -171,6 +217,8 @@ function triggerGameOver(reason) {
 
     state.view.squares.forEach((sq) => sq.classList.remove("enemy"));
 
+    playSound("gameOver");
+
     const stats = state.engines.score.getStats();
     const isRecord = stats.score >= stats.highScore && stats.score > 0;
 
@@ -190,10 +238,12 @@ function triggerGameOver(reason) {
 
     state.view.modal.classList.remove("hidden");
     state.view.initButton.disabled = false;
-    state.view.initButton.textContent = "▶ Jogar Novamente";
+    state.view.initButton.textContent = "▶ REINICIAR";
 }
 
 function startMatch() {
+    state.engines.synth.init();
+
     clearInterval(state.timers.clockTimerId);
     clearInterval(state.timers.spawnTimerId);
 
@@ -206,11 +256,13 @@ function startMatch() {
 
     state.view.score.textContent = "0";
     state.view.timeLeft.textContent = "60";
+    if (state.view.level) state.view.level.textContent = "1";
     state.view.highScore.textContent = state.engines.score.highScore;
     state.view.comboDisplay.textContent = "";
     state.view.modal.classList.add("hidden");
     state.view.initButton.disabled = true;
 
+    updateLoreDisplay(GAME_LEVELS[0]);
     renderLives(state.engines.score.lives);
 
     spawnNextEnemy();
@@ -223,7 +275,7 @@ function startMatch() {
 }
 
 function setupEvents() {
-    // PointerDown (Touch + Mouse sem delay)
+    // PointerDown (Touch + Mouse instantâneo)
     state.view.squares.forEach((square) => {
         square.addEventListener("pointerdown", (e) => {
             e.preventDefault();
@@ -252,50 +304,24 @@ function setupEvents() {
         }
     });
 
-    // Pausa Automática ao minimizar ou trocar de aba
-    window.addEventListener("blur", () => {
-        if (state.engines.fsm.is(States.PLAYING)) {
-            state.engines.fsm.transitionTo(States.PAUSED);
-            clearInterval(state.timers.clockTimerId);
-            clearInterval(state.timers.spawnTimerId);
-            state.view.comboDisplay.textContent = "⏸️ Jogo Pausado";
-        }
-    });
-
-    window.addEventListener("focus", () => {
-        if (state.engines.fsm.is(States.PAUSED)) {
-            state.engines.fsm.transitionTo(States.PLAYING);
-            state.view.comboDisplay.textContent = "";
-            rescheduleSpawn();
-            state.timers.clockTimerId = setInterval(onClockTick, 1000);
-        }
-    });
-
-    // Expor métodos globais para os botões do HTML
     window.startGame = startMatch;
-    window.restartGame = () => {
-        state.view.modal.classList.add("hidden");
-        startMatch();
-    };
+    window.restartGame = startMatch;
     window.toggleMusic = toggleMusic;
 }
 
-function registerServiceWorker() {
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("./sw.js").catch(() => {});
-    }
-}
+function initGame() {
+    preloadAssets();
 
-function bootstrap() {
     const savedHighScore = parseInt(localStorage.getItem("dante_dash_high_score") || "0", 10);
     state.engines.score = new ScoreEngine(savedHighScore, 3);
-    state.engines.spawn = new SpawnEngine(1000, 450, 9);
+    state.engines.spawn = new SpawnEngine(1400, 450, 9);
     state.engines.fsm = new GameStateManager(States.MENU);
 
     state.view.highScore.textContent = savedHighScore;
     renderLives(3);
+    updateLoreDisplay(GAME_LEVELS[0]);
+
     setupEvents();
-    registerServiceWorker();
 }
 
-window.addEventListener("DOMContentLoaded", bootstrap);
+window.addEventListener("DOMContentLoaded", initGame);

@@ -1,6 +1,6 @@
-# ⚡ Dante Dash — Arcade Edition (v2.1)
+# ⚡ Dante Dash — Arcade Edition (v2.2)
 
-> Jogo arcade de reflexo e agilidade desenvolvido em JavaScript ES6 nativo com arquitetura modular desacoplada (**FSM**, **ScoreEngine** puro, **PWA Offline-First** e **suíte de testes nativa com `node --test`**), preservando a arte autoral desenhada pelo Dante aos 4 anos e a trilha de heavy metal do Denis Martino.
+> Jogo arcade de reflexo e agilidade desenvolvido em JavaScript ES6 nativo com arquitetura modular desacoplada (**FSM**, **ScoreEngine** puro, **Web Audio API Sintetizador Procedural**, **PWA Offline-First** e **suíte de testes nativa com `node --test`**), preservando a arte autoral desenhada pelo Dante aos 4 anos e a trilha de heavy metal do Denis Martino.
 
 [![CI - Dante Dash Tests](https://img.shields.io/github/actions/workflow/status/julianachavespalm/dante-dash/ci.yml?branch=main&label=CI%20%2F%20Tests)](https://github.com/julianachavespalm/dante-dash/actions)
 [![PWA Ready](https://img.shields.io/badge/PWA-Offline%20First-brightgreen.svg)](#suporte-pwa-e-offline-first)
@@ -17,31 +17,32 @@ O **Dante Dash** é o projeto mais afetivo e especial deste ecossistema. Ele nas
 
 * **Concepção Visual e Desenho do Herói:** Criado e desenhado originalmente por **Dante Chaves Martino** aos **4 anos de idade**. O herói e os inimigos animados preservam com fidelidade absoluta o traço autoral e a imaginação infantil do Dante.
 * **Trilha Sonora Original:** Composta e gravada em guitarra heavy metal pelo professor e músico **Denis Martino Cota**.
-* **Engenharia de Software e Game Architecture:** Arquitetura desacoplada, máquina de estados finitos (FSM), PWA e suíte de testes desenvolvidos por **Juliana Chaves Palm**.
+* **Engenharia de Software e Game Architecture:** Arquitetura desacoplada, máquina de estados finitos (FSM), síntese Web Audio procedural, PWA e suíte de testes desenvolvidos por **Juliana Chaves Palm**.
 
 ---
 
 ## 🏛️ Arquitetura e Decisões de Engenharia
 
-O jogo foi refatorado para seguir uma **Clean Game Architecture** sem frameworks externos, onde as regras de negócio de pontuação e ciclo de vida são 100% isoladas da camada de apresentação:
+O jogo foi concebido sob uma **Clean Game Architecture** sem frameworks externos, onde as regras de negócio de pontuação e ciclo de vida são 100% isoladas da camada de apresentação:
 
 ```mermaid
 flowchart TD
     subgraph INPUT["1. Entrada & Adapters"]
-        Pointer["PointerDown Adapter<br/>(Touch & Mouse sem lag)"]
+        Pointer["PointerDown Adapter<br/>(Touch & Mouse instantâneo)"]
         Keyboard["Keyboard Adapter<br/>(Teclas 1..9 e QWE/ASD/ZXC)"]
     end
 
     subgraph CORE["2. Núcleo Puro de Domínio (src/scripts/core/)"]
         FSM["GameStateManager (FSM)<br/>MENU · PLAYING · PAUSED · GAME_OVER"]
         Score["ScoreEngine<br/>Regras de Pontos, Combos x1..x4 e Vidas"]
-        Spawn["SpawnEngine<br/>Velocidade Adaptativa & Sorteio sem Repetição"]
+        Spawn["SpawnEngine (5 Níveis)<br/>Temporização Progressiva (1400ms ➔ 450ms)"]
     end
 
     subgraph PRESENTATION["3. Apresentação & Feedback"]
         DOM["DOM Engine<br/>Grid 3x3, Animações e Shakes"]
         Modal["Modal Arcade de Game Over<br/>Celebração do Recorde"]
-        AudioEng["Audio Controller<br/>Trilha Metal Denis Martino + Som Hit"]
+        Synth["RetroAudioSynth (Web Audio API)<br/>Síntese Procedural 8-bits sem Latência"]
+        BGMusic["Trilha Metal Denis Martino<br/>Áudio Contínuo com Toggle"]
     end
 
     INPUT --> FSM
@@ -49,7 +50,8 @@ flowchart TD
     FSM --> Spawn
     FSM --> DOM
     FSM --> Modal
-    Score -.evento hit.-> AudioEng
+    Score -.evento hit/miss/level.-> Synth
+    FSM -.toggle music.-> BGMusic
 ```
 
 ### Máquina de Estados Finitos (FSM)
@@ -66,17 +68,21 @@ stateDiagram-v2
 
 ---
 
-## 🕹️ Funcionalidades da Arcade Edition
+## 🕹️ Funcionalidades da Arcade Edition v2.2
 
-1. **Velocidade Dinâmica Adaptativa:** O `SpawnEngine` acelera a frequência de aparição do herói/vilão conforme o placar aumenta, variando de 1000ms até 450ms.
-2. **Sistema de Combos & Multiplicadores:** Acertos em sequência acumulam multiplicadores (`x2`, `x3`, `x4`!), maximizando a pontuação.
-3. **Sistema de Vidas (3 Corações ❤️❤️❤️):** Erros de clique penalizam vidas. O jogo encerra se as 3 vidas acabarem ou se o cronômetro zerar.
-4. **Pausa Automática Inteligente:** Se o jogador minimizar a janela ou receber uma notificação no celular, a FSM transiciona para `PAUSED` sem queimar o tempo de jogo.
-5. **Multiplataforma Touch-First e Teclado:**
-   - **No Smartphone:** Resposta tátil imediata via `pointerdown` (elimina o delay de 300ms do mobile).
-   - **No Teclado do Desktop:** Mapeamento instantâneo das teclas numéricas `1` a `9` ou das teclas `Q, W, E / A, S, D / Z, X, C` correspondentes ao grid.
-6. **Suporte PWA e Offline-First:**
-   - Através de `manifest.json` e `sw.js` (Service Worker com cache inteligente), o jogo pode ser "instalado" no smartphone e jogado mesmo sem conexão com a internet.
+1. **Sintetizador Web Audio API 8-Bits Procedural:** Efeitos sonoros gerados dinamicamente em tempo real (ondas quadradas e dente-de-serra via `OscillatorNode` + `GainNode`), eliminando 100% da latência de download e decode de áudio ao clicar no herói.
+2. **Pré-carregamento e Decodificação de Sprites na GPU:** As animações e artes originais do Dante (`player.png`, `enemy-fighting.gif`, `enemy-dancing.gif`) são pré-carregadas via `Image.decode()`, eliminando qualquer atraso na renderização visual dos alvos.
+3. **Progressão de Dificuldade em 5 Níveis (Warm-up Calmo para Criança):**
+   - **Nível 1 (0 a 29 pts):** 1400ms — Começo tranquilo e acolhedor para aquecer reflexos.
+   - **Nível 2 (30 a 79 pts):** 1100ms — Monstrinhos do caderno ganham vida.
+   - **Nível 3 (80 a 149 pts):** 850ms — Solo de metal esquentando a arena.
+   - **Nível 4 (150 a 229 pts):** 650ms — Super velocidade turbo ativada.
+   - **Nível 5 (230+ pts):** 450ms — Modo lendário ninja.
+4. **Narrativa e Lore Dinâmico:** Cada fase avança uma história temática no painel arcade sem necessidade de alterar as animações originais.
+5. **Botões 8-Bits Encaixados no Console:** Design chanfrado em pixel art perfeitamente encaixado na barra de comando, com a paleta autêntica das canetinhas do Dante (Azul Royal `#1D4ED8` e Vermelho `#DC2626`).
+6. **Layout Totalmente Responsivo e Sem Rolagem Horizontal:** Correção de overflow viewport desktop e mobile, mantendo o enquadramento arcade limpo.
+7. **PWA e Offline-First:**
+   - Com `manifest.json` e Service Worker (`sw.js`), instalável nativamente em Android, iOS e Desktop.
 
 ---
 
@@ -92,9 +98,9 @@ npm test
 npm run test:coverage
 ```
 
-**Cenários testados (9 testes unitários — 100% de sucesso em ~200ms):**
-- **ScoreEngine:** Inicialização de estado, progressão de multiplicador de combos (`x1` a `x4`), limite máximo, penalização de vidas e salvamento de recorde histórico.
-- **SpawnEngine:** Cálculo de aceleração em curva assintótica e sorteio pseudo-aleatório garantindo zero repetição consecutiva de casas.
+**Cenários testados (10 testes unitários — 100% de sucesso em ~150ms):**
+- **ScoreEngine:** Inicialização de estado, progressão de multiplicador de combos (`x1` a `x4`), limite máximo, penalização de vidas e recorde histórico.
+- **SpawnEngine:** Progressão em 5 fases (1400ms ➔ 450ms), detecção de Level Up, reset de estado e sorteio sem repetição consecutiva.
 - **GameStateManager:** Validação do grafo de transições válidas, prevenção de saltos de estado proibidos e hooks de ciclo de vida.
 
 ---
@@ -116,40 +122,41 @@ Acesse a versão ao vivo: **[https://julianachavespalm.github.io/dante-dash/](ht
 ```text
 dante-dash/
 ├── .github/workflows/
-│   └── ci.yml                  # Esteira de CI multi-versão do Node.js (18, 20, 22)
-├── manifest.json               # Configuração PWA para instalação no celular/desktop
-├── sw.js                       # Service Worker com estratégia de Cache-First offline
-├── index.html                  # Casca semântica, scoreboard arcade e modal de game over
-├── package.json                # Configuração do pacote ES6 e scripts de teste
+│   └── ci.yml                  # Pipeline CI multi-versão do Node.js (18, 20, 22)
+├── manifest.json               # Configuração PWA
+├── sw.js                       # Service Worker com cache-first offline v2.2
+├── index.html                  # Casca semântica, console docked 8-bit e footer oficial
+├── package.json                # Configuração do pacote ES6 (v2.2.0)
 ├── src/
 │   ├── audios/
-│   │   ├── hit.m4a             # Som de impacto
 │   │   └── trilha-metal...m4a  # Trilha sonora original em heavy metal (Denis Martino)
 │   ├── img/
-│   │   ├── player.png          # Arte do herói desenhada pelo Dante aos 4 anos
-│   │   ├── enemy-fighting.gif  # Animação do herói em ação no grid
-│   │   ├── enemy-dancing.gif   # Animação do herói comemorando novo recorde
-│   │   └── wall.png            # Textura de fundo da arena
+│   │   ├── player.png          # Arte autoral desenhada pelo Dante aos 4 anos
+│   │   ├── enemy-fighting.gif  # Animação do herói no grid
+│   │   ├── enemy-dancing.gif   # Animação comemorativa de novo recorde
+│   │   └── wall.png            # Textura de tijolos da arena
 │   ├── scripts/
+│   │   ├── audio/
+│   │   │   └── synth.js        # Sintetizador Web Audio API 8-bits procedural
 │   │   ├── core/               # Domínio Puro (Zero DOM / 100% Testável)
 │   │   │   ├── gameState.js    # FSM com transições de ciclo de vida
 │   │   │   ├── scoreEngine.js  # Regras de pontuação, combos e vidas
-│   │   │   └── spawnEngine.js  # Curva de velocidade adaptativa e sorteio
+│   │   │   └── spawnEngine.js  # 5 Níveis adaptativos e lore progressivo
 │   │   └── engine.js           # Orquestração do DOM, inputs, áudio e Service Worker
 │   └── styles/
 │       ├── reset.css           # Normalização de estilos
-│       └── main.css            # Tipografia retrô 8-bit, grid responsivo e modal
+│       └── main.css            # Tipografia retrô 8-bit, dock de botões e zero rolagem
 └── tests/
-    └── core.test.js            # Suíte nativa com node:test
+    └── core.test.js            # Suíte nativa com node:test (10 testes)
 ```
 
 ---
 
 ## 💛 Créditos e Autoria
 
-* **Direção de Arte do Personagem:** Dante Chaves Martino (aos 4 anos)
+* **Desenvolvimento e Engenharia de Software:** [Juliana Chaves Palm](https://github.com/julianachavespalm)
+* **Direção de Arte e Desenho do Personagem:** Dante Chaves Martino (aos 4 anos)
 * **Trilha Sonora Original:** Denis Martino Cota
-* **Desenvolvimento e Engenharia:** [Juliana Chaves Palm](https://github.com/julianachavespalm)
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-julianachavespalm-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://linkedin.com/in/julianachavespalm)
 [![GitHub](https://img.shields.io/badge/GitHub-julianachavespalm-181717?style=flat-square&logo=github&logoColor=white)](https://github.com/julianachavespalm)
