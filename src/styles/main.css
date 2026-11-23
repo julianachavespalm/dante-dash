@@ -395,15 +395,15 @@ a {
     pointer-events: none;
 }
 
-/* Estado de Inimigo / Alvo com Fundo 100% Transparente */
+/* Estado de Inimigo / Alvo com Fundo Padrão */
 .panel__square.enemy {
-    background-color: transparent;
+    background-color: #2D2036;
     background-image: url("../img/enemy-fighting.gif");
-    background-size: 88%;
+    background-size: 80%;
     background-repeat: no-repeat;
     background-position: center;
-    border-color: #DC2626;
-    box-shadow: 0 0 14px rgba(220, 38, 38, 0.7);
+    border-color: #FF5500;
+    box-shadow: 0 0 16px rgba(255, 85, 0, 0.6);
     animation: pulseSquare 0.4s alternate infinite ease-in-out;
 }
 
@@ -419,7 +419,7 @@ a {
 
 @keyframes flashGreen {
     0% { background-color: #FFFFFF; }
-    100% { background-color: transparent; }
+    100% { background-color: #161620; }
 }
 
 .panel__hint {
