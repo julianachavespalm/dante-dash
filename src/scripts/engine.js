@@ -360,10 +360,16 @@ function setupEvents() {
             toggleSound();
         } else if (key === "h" || key === "?") {
             toggleHowToPlay();
+        } else if (key === "c") {
+            toggleCredits();
         } else if (key === "escape") {
             const infoModal = document.getElementById("how-to-play-modal");
             if (infoModal && !infoModal.classList.contains("hidden")) {
                 infoModal.classList.add("hidden");
+            }
+            const creditsModal = document.getElementById("credits-modal");
+            if (creditsModal && !creditsModal.classList.contains("hidden")) {
+                creditsModal.classList.add("hidden");
             }
         }
     });
@@ -373,11 +379,20 @@ function setupEvents() {
     window.toggleMusic = toggleMusic;
     window.toggleSound = toggleSound;
     window.toggleHowToPlay = toggleHowToPlay;
+    window.toggleCredits = toggleCredits;
 }
 
 function toggleHowToPlay() {
     state.engines.synth.init();
     const modal = document.getElementById("how-to-play-modal");
+    if (modal) {
+        modal.classList.toggle("hidden");
+    }
+}
+
+function toggleCredits() {
+    state.engines.synth.init();
+    const modal = document.getElementById("credits-modal");
     if (modal) {
         modal.classList.toggle("hidden");
     }

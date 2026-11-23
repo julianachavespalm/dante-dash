@@ -626,10 +626,10 @@ a {
     line-height: 1.6;
 }
 
-/* Rodapé Oficial de Autoria Compacto */
+/* Rodapé Oficial de Autoria Minimalista */
 .social-media {
     width: 100%;
-    padding: 0.35rem 0.5rem;
+    padding: 0.25rem 0.5rem;
     background-color: #07070B;
     border-top: 1px solid #1A1A26;
     color: #888899;
@@ -640,29 +640,91 @@ a {
 
 .social-media__tribute {
     line-height: 1.35;
-    margin-bottom: 0.2rem;
+    margin: 0;
 }
 
 .social-media__tribute strong {
     color: #E2E8F0;
 }
 
-.social-media__links {
+.credits-link {
+    background: none;
+    border: none;
+    color: #FFD700;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 0 3px;
+    transition: color 0.15s ease, text-shadow 0.15s ease;
+}
+
+.credits-link:hover {
+    color: #FFFFFF;
+    text-shadow: 0 0 8px rgba(255, 215, 0, 0.7);
+}
+
+/* Modal de Créditos (Estilo SEGA / Staff Roll) */
+.modal__card--credits {
+    max-width: 440px;
+    padding: 1rem 0.9rem 0.85rem;
+}
+
+.modal__credits-list {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    list-style: none;
-    gap: 1rem;
-    margin-top: 0.15rem;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0.65rem 0;
+    text-align: left;
 }
 
-.social-media__link {
+.credit-item {
+    background: #0B0B14;
+    border: 1px solid #222234;
+    border-radius: 6px;
+    padding: 0.45rem 0.6rem;
+}
+
+.credit-role {
+    display: block;
+    font-family: "Press Start 2P", monospace;
+    font-size: 0.42rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.2rem;
+}
+
+.credit-name {
+    font-size: 0.85rem;
+    color: #F8FAFC;
+    display: block;
+    margin-bottom: 0.12rem;
+}
+
+.credit-desc {
+    font-size: 0.7rem;
     color: #94A3B8;
-    transition: color 0.2s ease;
-    font-size: 0.68rem;
+    line-height: 1.35;
 }
 
-.social-media__link:hover {
+.modal__credits-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.2rem;
+    margin-bottom: 0.75rem;
+}
+
+.credit-social-link {
+    color: #94A3B8;
+    font-size: 0.72rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: color 0.15s ease;
+}
+
+.credit-social-link:hover {
     color: #FFD700;
 }
 

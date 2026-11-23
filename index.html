@@ -106,21 +106,8 @@
         <footer class="social-media">
             <p class="social-media__tribute">
                 Desenvolvido por <strong>Juliana Chaves Palm</strong> · 
-                Arte do Herói por <strong>Dante Chaves Martino</strong> (4 anos) · 
-                Trilha Sonora por <strong>Denis Martino</strong>
+                <button class="credits-link" onclick="toggleCredits()" title="Ver Créditos e Equipe do Jogo">[ Ver Créditos ]</button>
             </p>
-            <ul class="social-media__links">
-                <li class="social-media__item">
-                    <a href="https://github.com/julianachavespalm/dante-dash" target="_blank" rel="noopener" class="social-media__link">
-                        <i class="fa-brands fa-github"></i> GitHub
-                    </a>
-                </li>
-                <li class="social-media__item">
-                    <a href="https://www.linkedin.com/in/julianachavespalm" target="_blank" rel="noopener" class="social-media__link">
-                        <i class="fa-brands fa-linkedin"></i> LinkedIn
-                    </a>
-                </li>
-            </ul>
         </footer>
     </div>
 
@@ -187,6 +174,50 @@
             <button class="pixel-btn btn-blue" onclick="toggleHowToPlay()">
                 <span class="material-symbols-outlined">check_circle</span>
                 <span>ENTENDI</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal Arcade: Créditos Oficiais (Staff Roll) -->
+    <div id="credits-modal" class="modal hidden" onclick="if(event.target === this) toggleCredits()">
+        <div class="modal__card modal__card--credits">
+            <h2 class="modal__title is-golden">
+                <span class="material-symbols-outlined">military_tech</span>
+                <span>CRÉDITOS DO JOGO</span>
+            </h2>
+
+            <div class="modal__credits-list">
+                <div class="credit-item">
+                    <span class="credit-role is-golden">LEAD ENGINEERING & GAME DESIGN</span>
+                    <strong class="credit-name">Juliana Chaves Palm</strong>
+                    <p class="credit-desc">Arquitetura de software, interface arcade responsiva, motor de pontuação adaptativo e sintetizador procedural Web Audio API.</p>
+                </div>
+
+                <div class="credit-item">
+                    <span class="credit-role is-highlight">ARTE ORIGINAL DO HERÓI</span>
+                    <strong class="credit-name">Dante Chaves Martino</strong>
+                    <p class="credit-desc">Desenhou o personagem aos 4 anos de idade com papel e canetinha, inspirando todo o projeto e dando vida ao corajoso herói do castelo.</p>
+                </div>
+
+                <div class="credit-item">
+                    <span class="credit-role is-golden">TRILHA SONORA ORIGINAL</span>
+                    <strong class="credit-name">Denis Martino</strong>
+                    <p class="credit-desc">Composição autoral e gravação de guitarras pesadas, trazendo a energia do metal clássico dos anos 90 para a atmosfera eletrizante do jogo.</p>
+                </div>
+            </div>
+
+            <div class="modal__credits-links">
+                <a href="https://github.com/julianachavespalm/dante-dash" target="_blank" rel="noopener" class="credit-social-link">
+                    <i class="fa-brands fa-github"></i> GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/julianachavespalm" target="_blank" rel="noopener" class="credit-social-link">
+                    <i class="fa-brands fa-linkedin"></i> LinkedIn
+                </a>
+            </div>
+
+            <button class="pixel-btn btn-blue" onclick="toggleCredits()">
+                <span class="material-symbols-outlined">check_circle</span>
+                <span>FECHAR</span>
             </button>
         </div>
     </div>
