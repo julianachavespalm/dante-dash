@@ -338,14 +338,14 @@ function setupEvents() {
         });
     });
 
-    // Teclado Numérico (7 8 9 topo, 4 5 6 meio, 1 2 3 base) e QWE/ASD/ZXC
+    // Teclado (1 2 3 topo, 4 5 6 meio, 7 8 9 base) e QWE/ASD/ZXC
     const keyMap = {
-        "7": "7", "8": "8", "9": "9",
-        "4": "4", "5": "5", "6": "6",
         "1": "1", "2": "2", "3": "3",
-        "q": "7", "w": "8", "e": "9",
+        "4": "4", "5": "5", "6": "6",
+        "7": "7", "8": "8", "9": "9",
+        "q": "1", "w": "2", "e": "3",
         "a": "4", "s": "5", "d": "6",
-        "z": "1", "x": "2", "c": "3"
+        "z": "7", "x": "8", "c": "9"
     };
 
     window.addEventListener("keydown", (e) => {

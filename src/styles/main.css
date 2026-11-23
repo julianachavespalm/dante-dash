@@ -410,20 +410,20 @@ a {
     margin-bottom: 0;
 }
 
-/* Quadrado da Arena: Sempre em branco dentro do retângulo com tijolos */
+/* Quadrado da Arena: Fundo escuro padrão */
 .panel__square {
     position: relative;
     width: clamp(56px, 12vh, 78px);
     height: clamp(56px, 12vh, 78px);
-    background-color: #FFFFFF;
-    border: 2px solid #000000;
+    background-color: #181824;
+    border: 2px solid #2D2D40;
     border-radius: 4px;
     cursor: pointer;
     overflow: hidden;
     transition: transform 0.06s ease, border-color 0.12s ease;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
-    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.12);
+    padding: 0;
 }
 
 .panel__square:active {
@@ -435,20 +435,22 @@ a {
     bottom: 2px;
     right: 4px;
     font-size: 0.55rem;
-    color: #666666;
+    color: #64748B;
     font-family: "Press Start 2P", monospace;
     pointer-events: none;
+    z-index: 2;
 }
 
-/* Estado de Inimigo / Alvo: O Boneco em Fundo Branco Original */
+/* Estado de Inimigo / Alvo: Área Branca Total Sem Padding */
 .panel__square.enemy {
-    background-color: #FFFFFF;
+    background-color: #FFFFFF !important;
     background-image: url("../img/enemy-fighting.gif");
-    background-size: 85%;
+    background-size: 100% 100% !important;
     background-repeat: no-repeat;
     background-position: center;
     border-color: #FF5500;
-    box-shadow: 0 0 16px rgba(255, 85, 0, 0.6);
+    box-shadow: 0 0 16px rgba(255, 85, 0, 0.65);
+    padding: 0 !important;
     animation: pulseSquare 0.4s alternate infinite ease-in-out;
 }
 
@@ -464,7 +466,7 @@ a {
 
 @keyframes flashGreen {
     0% { background-color: #00FF66; }
-    100% { background-color: #FFFFFF; }
+    100% { background-color: #181824; }
 }
 
 /* Modal Arcade: Genérico e Como Jogar */
