@@ -1,4 +1,4 @@
-# ⚡ Dante Dash — Arcade Edition
+# Dante Dash — Arcade Edition
 
 > Jogo arcade de reflexo e agilidade desenvolvido em JavaScript ES6 nativo com estética retrô 8-bit, velocidade dinâmica adaptativa, sistema de combos, atalhos de teclado, áudio acústico/metal e controle responsivo touch-first.
 
