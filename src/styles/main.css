@@ -344,6 +344,127 @@ footer {
     text-shadow: -2px -2px 0 var(--cyan), 2px 2px 0 var(--primary);
 }
 
+/* Textos e Elementos Rigorosamente Centralizados nas Telas de Perder e Vencer */
+#modal-game-over .modal-header,
+#modal-victory .modal-header {
+    position: relative;
+    justify-content: center;
+    text-align: center;
+}
+
+#modal-game-over .modal-title,
+#modal-victory .modal-title {
+    text-align: center;
+    justify-content: center;
+    width: 100%;
+}
+
+#modal-game-over .close-btn,
+#modal-victory .close-btn {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+#modal-game-over .close-btn:active,
+#modal-victory .close-btn:active {
+    transform: translateY(-50%) translate(4px, 4px);
+}
+
+#modal-game-over .modal-body,
+#modal-victory .modal-body {
+    max-width: 700px;
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    align-items: center;
+}
+
+#modal-game-over .info-block,
+#modal-victory .info-block {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100%;
+    gap: 10px;
+}
+
+#modal-game-over .info-emoji,
+#modal-victory .info-emoji {
+    margin: 0 auto;
+}
+
+#modal-game-over .info-text,
+#modal-victory .info-text {
+    align-items: center;
+    text-align: center;
+}
+
+#modal-game-over .info-text h3,
+#modal-victory .info-text h3 {
+    text-align: center;
+    font-size: 16px;
+    margin: 0 auto;
+}
+
+#modal-game-over .info-text p,
+#modal-victory .info-text p {
+    text-align: center;
+    font-size: 13px;
+    max-width: 540px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+#modal-game-over .info-block > h3,
+#modal-victory .info-block > h3 {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+#modal-game-over .modal-stats-grid,
+#modal-victory .modal-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    max-width: 580px;
+    margin: 8px auto 0;
+}
+
+@media (max-width: 520px) {
+    #modal-game-over .modal-stats-grid,
+    #modal-victory .modal-stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+#modal-game-over .modal-stat-item,
+#modal-victory .modal-stat-item {
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+
+#modal-game-over .modal-stat-label,
+#modal-victory .modal-stat-label {
+    text-align: center;
+}
+
+#modal-game-over .modal-stat-val,
+#modal-victory .modal-stat-val {
+    text-align: center;
+}
+
+#modal-game-over .btn-modal-action,
+#modal-victory .btn-modal-action {
+    max-width: 440px;
+    margin: 15px auto 10px;
+    align-self: center;
+    justify-content: center;
+    text-align: center;
+}
+
 .modal-title {
     text-align: left;
     font-size: clamp(8px, 4vw, 18px);
