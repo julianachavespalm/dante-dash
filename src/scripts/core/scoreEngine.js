@@ -62,4 +62,8 @@ export class ScoreEngine {
             isAlive: this.lives > 0
         };
     }
+
+    get isAlive() {
+        return this.lives > 0;
+    }
 }

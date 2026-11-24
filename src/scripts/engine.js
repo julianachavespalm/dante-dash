@@ -189,6 +189,8 @@ function rescheduleSpawn() {
 
 function handleCellPress(cellId) {
     if (!state.engines.fsm.is(States.PLAYING)) return;
+    // Se o herói já foi acertado e o próximo ainda não apareceu, ignora toque para evitar erro fantasma
+    if (!state.timers.hitPosition) return;
 
     const cellElement = document.getElementById(cellId);
     if (!cellElement) return;
@@ -237,7 +239,7 @@ function onClockTick() {
     state.view.timeLeft.textContent = state.timers.currentTime;
 
     if (state.timers.currentTime <= 0) {
-        if (state.engines.score.isAlive) {
+        if (state.engines.score.lives > 0) {
             triggerVictory();
         } else {
             triggerGameOver("Tempo Esgotado!");
@@ -295,6 +297,15 @@ function triggerVictory() {
     playSound("levelUp");
 
     const stats = state.engines.score.getStats();
+    const isRecord = stats.score >= stats.highScore && stats.score > 0;
+
+    if (isRecord) {
+        if (state.view.vicTitle) state.view.vicTitle.textContent = "NOVO RECORDE!";
+        if (state.view.vicMsg) state.view.vicMsg.textContent = `Incrível! Você fez ${stats.score} pontos e superou o recorde geral!`;
+    } else {
+        if (state.view.vicTitle) state.view.vicTitle.textContent = "Missão Cumprida!";
+        if (state.view.vicMsg) state.view.vicMsg.textContent = `Incrível! Você sobreviveu aos 60 segundos com ${stats.score} pontos!`;
+    }
 
     if (state.view.vicScore) state.view.vicScore.textContent = stats.score;
     if (state.view.vicRecord) state.view.vicRecord.textContent = stats.highScore;

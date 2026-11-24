@@ -58,9 +58,11 @@ describe("ScoreEngine - Regras de Pontuação, Combo e Vidas", () => {
         assert.equal(engine.combo, 0);
 
         engine.registerMiss();
+        assert.equal(engine.isAlive, true);
         const miss3 = engine.registerMiss();
         assert.equal(miss3.livesRemaining, 0);
         assert.equal(miss3.isGameOver, true);
+        assert.equal(engine.isAlive, false);
     });
 
     it("deve detectar e atualizar novo recorde", () => {
