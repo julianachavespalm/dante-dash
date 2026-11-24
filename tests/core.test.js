@@ -83,25 +83,25 @@ describe("SpawnEngine - Temporização Adaptativa em 5 Níveis e Sorteio", () =>
         assert.equal(lvl1.level, 1);
         assert.equal(lvl1.velocity, 1540);
 
-        // Nível 2: 30 pontos
-        const lvl2 = spawn.calculateLevel(30);
+        // Nível 2: 22 pontos
+        const lvl2 = spawn.calculateLevel(22);
         assert.equal(lvl2.level, 2);
         assert.equal(lvl2.velocity, 1210);
         assert.equal(lvl2.isLevelUp, true);
 
-        // Nível 3: 80 pontos
-        const lvl3 = spawn.calculateLevel(80);
+        // Nível 3: 60 pontos
+        const lvl3 = spawn.calculateLevel(60);
         assert.equal(lvl3.level, 3);
         assert.equal(lvl3.velocity, 935);
         assert.equal(lvl3.isLevelUp, true);
 
-        // Nível 4: 150 pontos
-        const lvl4 = spawn.calculateLevel(150);
+        // Nível 4: 112 pontos
+        const lvl4 = spawn.calculateLevel(112);
         assert.equal(lvl4.level, 4);
         assert.equal(lvl4.velocity, 715);
 
-        // Nível 5: 250 pontos
-        const lvl5 = spawn.calculateLevel(250);
+        // Nível 5: 172 pontos
+        const lvl5 = spawn.calculateLevel(172);
         assert.equal(lvl5.level, 5);
         assert.equal(lvl5.velocity, 495);
     });

@@ -8,10 +8,10 @@
 
 export const GAME_LEVELS = [
     { level: 1, minScore: 0, velocity: 1540, story: "Dante acorda seu robô para brincar no castelo!" },
-    { level: 2, minScore: 30, velocity: 1210, story: "O ritmo acelerou! Os monstrinhos do caderno ganharam vida!" },
-    { level: 3, minScore: 80, velocity: 935, story: "Solo de guitarra do Denis Martino esquentando a arena!" },
-    { level: 4, minScore: 150, velocity: 715, story: "Super velocidade ativada! Dante está com turbo total!" },
-    { level: 5, minScore: 230, velocity: 495, story: "Modo Lendário! Reflexos ninja no castelo do Dante!" }
+    { level: 2, minScore: 22, velocity: 1210, story: "O ritmo acelerou! Os monstrinhos do caderno ganharam vida!" },
+    { level: 3, minScore: 60, velocity: 935, story: "Solo de guitarra do Denis Martino esquentando a arena!" },
+    { level: 4, minScore: 112, velocity: 715, story: "Super velocidade ativada! Dante está com turbo total!" },
+    { level: 5, minScore: 172, velocity: 495, story: "Modo Lendário! Reflexos ninja no castelo do Dante!" }
 ];
 
 export class SpawnEngine {
