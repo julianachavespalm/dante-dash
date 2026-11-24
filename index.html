@@ -1,228 +1,300 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dante Dash - Arcade Edition</title>
+    
+    <!-- PWA & Favicon -->
     <link rel="icon" type="image/jpeg" href="./src/img/favicon.jpg">
     <link rel="manifest" href="./manifest.json">
-    <meta name="theme-color" content="#1D4ED8">
+    <meta name="theme-color" content="#050505">
+
+    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Fontes e Ícones Oficiais do Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Silkscreen:wght@400;700&family=Wix+Madefor+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=B612+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    
+    <!-- Ícones Material Symbols -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    
+    <!-- Ícones FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Estilos -->
     <link rel="stylesheet" href="./src/styles/reset.css">
     <link rel="stylesheet" href="./src/styles/main.css">
-    <title>Dante Dash - Arcade Edition</title>
 </head>
 <body>
-    <div class="arcade-cabinet">
-        <header class="banner">
-            <div class="banner__logo is-flex">
-                <img class="banner__img" src="./src/img/player.png" alt="Herói Dante Dash">
-                <h1 class="banner__title is-golden">Dante Dash</h1>
-            </div>
-
-            <!-- HUD de Status Arcade Responsivo com Ícones do Google Fonts -->
-            <div class="banner__scoreboard">
-                <div class="score-card" title="Tempo restante">
-                    <span class="material-symbols-outlined score-icon">schedule</span>
-                    <span class="score-label">TEMPO</span>
-                    <span class="score-value is-golden" id="time-left">60</span>
-                </div>
-                <div class="score-card" title="Pontuação">
-                    <span class="material-symbols-outlined score-icon">stars</span>
-                    <span class="score-label">PONTOS</span>
-                    <span class="score-value" id="score">0</span>
-                </div>
-                <div class="score-card" title="Nível atual">
-                    <span class="material-symbols-outlined score-icon">trending_up</span>
-                    <span class="score-label">NÍVEL</span>
-                    <span class="score-value is-golden" id="level">1</span>
-                </div>
-                <div class="score-card" title="Maior Recorde">
-                    <span class="material-symbols-outlined score-icon">trophy</span>
-                    <span class="score-label">RECORDE</span>
-                    <span class="score-value is-highlight" id="high-score">0</span>
-                </div>
-                <div class="score-card" title="Vidas">
-                    <span class="material-symbols-outlined score-icon">favorite</span>
-                    <span class="score-label">VIDAS</span>
-                    <div class="score-value" id="lives"></div>
-                </div>
-            </div>
-
-            <!-- Barra Encaixada de Botões 8-Bits com Controle de Som, Música e Ajuda -->
-            <div class="banner__controls-dock">
-                <button class="pixel-btn btn-blue" id="initButton" onclick="startGame()" title="Iniciar Partida (Espaço)">
-                    <span class="material-symbols-outlined">play_arrow</span>
-                    <span>INICIAR</span>
-                </button>
-                <button class="pixel-btn btn-sound" id="soundButton" onclick="toggleSound()" title="Ativar/Desativar Sons do Jogo (Tecla S)">
-                    <span class="material-symbols-outlined">volume_up</span>
-                    <span>SOM: ON</span>
-                </button>
-                <button class="pixel-btn btn-red" id="musicButton" onclick="toggleMusic()" title="Ligar/Desligar Trilha Sonora (Tecla M)">
-                    <span class="material-symbols-outlined">music_note</span>
-                    <span>MÚSICA: OFF</span>
-                </button>
-                <button class="pixel-btn btn-info" id="infoButton" onclick="toggleHowToPlay()" title="Como Jogar (Tecla H)">
-                    <span class="material-symbols-outlined">help</span>
-                    <span>AJUDA</span>
-                </button>
-            </div>
-
-            <!-- Faixa de Narrativa / Evolução de História -->
-            <div class="arcade-lore-bar" id="story-display">
-                <span class="lore-tag" id="lore-tag">FASE 1</span>
-                <span class="lore-text" id="lore-text">Dante acorda seu robô para brincar no castelo!</span>
-            </div>
-
-            <div id="combo-display" class="combo-display"></div>
-        </header>
-
-        <!-- Arena 3x3 dos Tijolos -->
-        <main class="panel-container">
-            <div class="panel">
-                <div class="panel__row is-flex">
-                    <div class="panel__square" id="1" data-key="1"><span class="key-hint">1</span></div>
-                    <div class="panel__square" id="2" data-key="2"><span class="key-hint">2</span></div>
-                    <div class="panel__square" id="3" data-key="3"><span class="key-hint">3</span></div>
-                </div>
-                <div class="panel__row is-flex">
-                    <div class="panel__square" id="4" data-key="4"><span class="key-hint">4</span></div>
-                    <div class="panel__square" id="5" data-key="5"><span class="key-hint">5</span></div>
-                    <div class="panel__square" id="6" data-key="6"><span class="key-hint">6</span></div>
-                </div>
-                <div class="panel__row is-flex">
-                    <div class="panel__square" id="7" data-key="7"><span class="key-hint">7</span></div>
-                    <div class="panel__square" id="8" data-key="8"><span class="key-hint">8</span></div>
-                    <div class="panel__square" id="9" data-key="9"><span class="key-hint">9</span></div>
-                </div>
-            </div>
-        </main>
-
-        <!-- Rodapé Oficial de Autoria -->
-        <footer class="social-media">
-            <p class="social-media__tribute">
-                Desenvolvido por <strong>Juliana Chaves Palm</strong> · 
-                <button class="credits-link" onclick="toggleCredits()" title="Ver Créditos e Equipe do Jogo">[ Ver Créditos ]</button>
-            </p>
-        </footer>
+    <!-- Interface Principal -->
+    <div class="header">
+        <h1 class="title">Dante Dash</h1>
     </div>
-
-    <!-- Modal Arcade de Game Over -->
-    <div id="game-over-modal" class="modal hidden">
-        <div class="modal__card">
-            <img id="modal-dante-img" class="modal__img" src="./src/img/enemy-dancing.gif" alt="Dante Comemorando">
-            <h2 id="modal-title" class="modal__title is-golden">FIM DE JOGO!</h2>
-            <p id="modal-message" class="modal__text">Você mandou bem demais!</p>
-            <div class="modal__stats">
-                <p>Pontuação: <span id="final-score" class="is-golden">0</span></p>
-                <p>Maior Combo: <span id="final-combo" class="is-highlight">x1</span></p>
-                <p>Recorde Geral: <span id="modal-high-score">0</span></p>
+    
+    <div class="stats-bar">
+        <div class="stat-box">
+            <div class="stat-label">TEMPO</div>
+            <div class="stat-value" id="time-left">60</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">PONTOS</div>
+            <div class="stat-value" id="score" style="color: #fff; text-shadow: none;">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">NÍVEL</div>
+            <div class="stat-value" id="level">1</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">RECORDE</div>
+            <div class="stat-value" id="high-score">0</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-label">VIDAS</div>
+            <div class="stat-value" id="lives" style="text-shadow:none;">❤️❤️❤️</div>
+        </div>
+    </div>
+    
+    <div class="joystick-menu">
+        <button class="joy-btn" id="btn-play" aria-label="Iniciar" title="Iniciar / Pausar (Espaço)">
+            <i class="fas fa-play"></i>
+        </button>
+        <button class="joy-btn" id="btn-sound" aria-label="Som" title="Sons do Jogo (Tecla S)">
+            <i class="fas fa-volume-up"></i>
+        </button>
+        <button class="joy-btn muted" id="btn-music" aria-label="Música" title="Trilha Sonora (Tecla M)">
+            <i class="fas fa-music"></i>
+        </button>
+        <button class="joy-btn" id="btn-restart" aria-label="Novo Jogo" title="Reiniciar Partida">
+            <i class="fas fa-redo-alt"></i>
+        </button>
+        <button class="joy-btn" id="btn-help" aria-label="Ajuda" title="Como Jogar (Tecla H)">
+            <i class="fas fa-question"></i>
+        </button>
+    </div>
+    
+    <div class="board-wrapper">
+        <div class="board-container">
+            <div class="game-board">
+                <div class="cell" id="1">
+                    <img src="./src/img/player.png" alt="Dante" class="hero-sprite">
+                    <span>1</span>
+                </div>
+                <div class="cell" id="2">
+                    <img src="./src/img/player.png" alt="Dante" class="hero-sprite">
+                    <span>2</span>
+                </div>
+                <div class="cell" id="3">
+                    <img src="./src/img/player.png" alt="Dante" class="hero-sprite">
+                    <span>3</span>
+                </div>
+                <div class="cell" id="4">
+                    <img src="./src/img/player.png" alt="Dante" class="hero-sprite">
+                    <span>4</span>
+                </div>
+                <div class="cell" id="5">
+                    <img src="./src/img/player.png" alt="Dante" class="hero-sprite">
+                    <span>5</span>
+                </div>
+                <div class="cell" id="6">
+                    <img src="./src/img/player.png" alt="Dante" class="hero-sprite">
+                    <span>6</span>
+                </div>
+                <div class="cell" id="7">
+                    <img src="./src/img/player.png" alt="Dante" class="hero-sprite">
+                    <span>7</span>
+                </div>
+                <div class="cell" id="8">
+                    <img src="./src/img/player.png" alt="Dante" class="hero-sprite">
+                    <span>8</span>
+                </div>
+                <div class="cell" id="9">
+                    <img src="./src/img/player.png" alt="Dante" class="hero-sprite">
+                    <span>9</span>
+                </div>
             </div>
-            <button class="pixel-btn btn-blue" onclick="restartGame()">
-                <span class="material-symbols-outlined">replay</span>
-                <span>JOGAR NOVAMENTE</span>
-            </button>
         </div>
     </div>
 
-    <!-- Modal Arcade: Como Jogar (Botão de Ajuda) -->
-    <div id="how-to-play-modal" class="modal hidden" onclick="if(event.target === this) toggleHowToPlay()">
-        <div class="modal__card modal__card--info">
-            <h2 class="modal__title is-golden">
-                <span class="material-symbols-outlined">help</span>
-                <span>COMO JOGAR</span>
-            </h2>
+    <!-- Banner Flutuante de Combo -->
+    <div class="combo-banner" id="combo-banner">COMBO x2!</div>
+    
+    <footer>
+        Desenvolvido por Juliana Chaves Palm <br><br> 
+        [ <span class="footer-link" id="btn-credits">Ver Créditos</span> ]
+    </footer>
+
+    <!-- MODAL 1: COMO JOGAR -->
+    <div class="modal-overlay" id="modal-help">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-question-circle" style="color: var(--secondary)"></i>COMO JOGAR</h2>
+                <button class="close-btn" id="btn-close-help" aria-label="Fechar">X</button>
+            </div>
             
-            <div class="modal__instructions">
-                <div class="instruction-row">
-                    <span class="material-symbols-outlined inst-icon icon-touch">touch_app</span>
-                    <div class="inst-content">
-                        <strong>Smartphone / Tablet:</strong>
+            <div class="modal-body">
+                <div class="info-block">
+                    <div class="info-emoji"><span class="material-symbols-outlined" style="color: var(--cyan);">touch_app</span></div>
+                    <div class="info-text">
+                        <h3>Smartphone / Tablet:</h3>
                         <p>Toque diretamente no bloco onde o Dante aparecer!</p>
                     </div>
                 </div>
                 
-                <div class="instruction-row">
-                    <span class="material-symbols-outlined inst-icon icon-key">keyboard</span>
-                    <div class="inst-content">
-                        <strong>Teclado no Desktop:</strong>
-                        <p>Use as teclas <code>1</code> a <code>9</code> ou <code>QWE / ASD / ZXC</code> correspondentes à posição no grid.</p>
+                <div class="info-block">
+                    <div class="info-emoji"><span class="material-symbols-outlined" style="color: var(--primary);">keyboard</span></div>
+                    <div class="info-text">
+                        <h3>Teclado no Desktop:</h3>
+                        <p>Use as teclas <span class="highlight-text">1</span> a <span class="highlight-text">9</span> ou <span class="highlight-text">QWE</span> / <span class="highlight-text">ASD</span> / <span class="highlight-text">ZXC</span> correspondentes à posição no grid.</p>
                     </div>
                 </div>
                 
-                <div class="instruction-row">
-                    <span class="material-symbols-outlined inst-icon icon-fire">local_fire_department</span>
-                    <div class="inst-content">
-                        <strong>Combos & Multiplicadores:</strong>
-                        <p>Acerte alvos seguidos para acelerar a pontuação até <code>x4</code>!</p>
+                <div class="info-block">
+                    <div class="info-emoji"><span class="material-symbols-outlined" style="color: var(--secondary);">local_fire_department</span></div>
+                    <div class="info-text">
+                        <h3>Combos & Multiplicadores:</h3>
+                        <p>Acerte alvos seguidos para acelerar a pontuação até <span class="highlight-text">x4</span>!</p>
                     </div>
                 </div>
                 
-                <div class="instruction-row">
-                    <span class="material-symbols-outlined inst-icon icon-heart">favorite</span>
-                    <div class="inst-content">
-                        <strong>Cuidado com as Vidas:</strong>
+                <div class="info-block">
+                    <div class="info-emoji"><span class="material-symbols-outlined" style="color: var(--danger);">favorite</span></div>
+                    <div class="info-text">
+                        <h3>Cuidado com as Vidas:</h3>
                         <p>Você tem 3 vidas. Clicar em quadrados vazios custa 1 coração.</p>
                     </div>
                 </div>
             </div>
-
-            <button class="pixel-btn btn-blue" onclick="toggleHowToPlay()">
-                <span class="material-symbols-outlined">check_circle</span>
-                <span>ENTENDI</span>
-            </button>
         </div>
     </div>
 
-    <!-- Modal Arcade: Créditos Oficiais (Staff Roll) -->
-    <div id="credits-modal" class="modal hidden" onclick="if(event.target === this) toggleCredits()">
-        <div class="modal__card modal__card--credits">
-            <h2 class="modal__title is-golden">
-                <span class="material-symbols-outlined">military_tech</span>
-                <span>CRÉDITOS DO JOGO</span>
-            </h2>
-
-            <div class="modal__credits-list">
-                <div class="credit-item">
-                    <span class="credit-role is-golden">LEAD ENGINEERING & GAME DESIGN</span>
-                    <strong class="credit-name">Juliana Chaves Palm</strong>
-                    <p class="credit-desc">Arquitetura de software, interface arcade responsiva, motor de pontuação adaptativo e sintetizador procedural Web Audio API.</p>
+    <!-- MODAL 2: CRÉDITOS DO JOGO -->
+    <div class="modal-overlay" id="modal-credits">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-award" style="color: var(--cyan)"></i>CRÉDITOS DO JOGO</h2>
+                <button class="close-btn" id="btn-close-credits" aria-label="Fechar">X</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="info-block" style="flex-direction: column; gap: 2px;">
+                    <div class="credit-role">LEAD ENGINEERING & GAME DESIGN</div>
+                    <div class="credit-name">JULIANA CHAVES PALM</div>
+                    <div class="info-text"><p>Arquitetura de software, interface arcade responsiva, motor de pontuação adaptativo e sintetizador procedural Web Audio API.</p></div>
+                </div>
+                
+                <div class="info-block" style="flex-direction: column; gap: 2px;">
+                    <div class="credit-role">ARTE ORIGINAL DO HERÓI</div>
+                    <div class="credit-name">DANTE CHAVES MARTINO</div>
+                    <div class="info-text"><p>Desenhou o personagem aos 4 anos de idade com papel e canetinha, inspirando todo o projeto e dando vida ao corajoso herói do castelo.</p></div>
+                </div>
+                
+                <div class="info-block" style="flex-direction: column; gap: 2px;">
+                    <div class="credit-role">TRILHA SONORA ORIGINAL</div>
+                    <div class="credit-name">DENIS MARTINO</div>
+                    <div class="info-text"><p>Composição autoral e gravação de guitarras pesadas, trazendo a energia do metal clássico dos anos 90 para a atmosfera eletrizante do jogo.</p></div>
                 </div>
 
-                <div class="credit-item">
-                    <span class="credit-role is-highlight">ARTE ORIGINAL DO HERÓI</span>
-                    <strong class="credit-name">Dante Chaves Martino</strong>
-                    <p class="credit-desc">Desenhou o personagem aos 4 anos de idade com papel e canetinha, inspirando todo o projeto e dando vida ao corajoso herói do castelo.</p>
-                </div>
-
-                <div class="credit-item">
-                    <span class="credit-role is-golden">TRILHA SONORA ORIGINAL</span>
-                    <strong class="credit-name">Denis Martino</strong>
-                    <p class="credit-desc">Composição autoral e gravação de guitarras pesadas, trazendo a energia do metal clássico dos anos 90 para a atmosfera eletrizante do jogo.</p>
+                <div class="social-links">
+                    <a href="https://github.com/julianachavespalm" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="https://linkedin.com/in/julianachavespalm" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin"></i> LinkedIn</a>
                 </div>
             </div>
-
-            <div class="modal__credits-links">
-                <a href="https://github.com/julianachavespalm/dante-dash" target="_blank" rel="noopener" class="credit-social-link">
-                    <i class="fa-brands fa-github"></i> GitHub
-                </a>
-                <a href="https://www.linkedin.com/in/julianachavespalm" target="_blank" rel="noopener" class="credit-social-link">
-                    <i class="fa-brands fa-linkedin"></i> LinkedIn
-                </a>
-            </div>
-
-            <button class="pixel-btn btn-blue" onclick="toggleCredits()">
-                <span class="material-symbols-outlined">check_circle</span>
-                <span>FECHAR</span>
-            </button>
         </div>
     </div>
 
-    <script src="https://kit.fontawesome.com/e0954b0c75.js" crossorigin="anonymous"></script>
+    <!-- MODAL 3: FIM DE JOGO (TELA DE PERDER) -->
+    <div class="modal-overlay" id="modal-game-over">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-skull" style="color: var(--danger)"></i>FIM DE JOGO</h2>
+                <button class="close-btn" id="btn-close-game-over" aria-label="Fechar">X</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="info-block">
+                    <div class="info-emoji"><span class="material-symbols-outlined" style="color: var(--danger);">heart_broken</span></div>
+                    <div class="info-text">
+                        <h3 id="game-over-title">Sem Vidas!</h3>
+                        <p id="game-over-msg">Os reflexos falharam desta vez, mas o Dante está pronto para a revanche no castelo!</p>
+                    </div>
+                </div>
+                
+                <div class="info-block" style="flex-direction: column; gap: 8px;">
+                    <h3>Estatísticas da Partida:</h3>
+                    <div class="modal-stats-grid">
+                        <div class="modal-stat-item">
+                            <div class="modal-stat-label">PONTOS</div>
+                            <div class="modal-stat-val" id="go-score">0</div>
+                        </div>
+                        <div class="modal-stat-item">
+                            <div class="modal-stat-label">RECORDE</div>
+                            <div class="modal-stat-val" id="go-record">0</div>
+                        </div>
+                        <div class="modal-stat-item">
+                            <div class="modal-stat-label">NÍVEL</div>
+                            <div class="modal-stat-val" id="go-level">1</div>
+                        </div>
+                        <div class="modal-stat-item">
+                            <div class="modal-stat-label">COMBO MAX</div>
+                            <div class="modal-stat-val" id="go-combo">x0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="joy-btn btn-modal-action" id="btn-restart-game-over" aria-label="Tentar Novamente">
+                    <i class="fas fa-redo-alt"></i> TENTAR NOVAMENTE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: VITÓRIA (TELA DE VENCER) -->
+    <div class="modal-overlay" id="modal-victory">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"><i class="fas fa-trophy" style="color: var(--secondary)"></i>VITÓRIA!</h2>
+                <button class="close-btn" id="btn-close-victory" aria-label="Fechar">X</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="info-block">
+                    <div class="info-emoji"><span class="material-symbols-outlined" style="color: var(--secondary);">emoji_events</span></div>
+                    <div class="info-text">
+                        <h3 id="victory-title">Missão Cumprida!</h3>
+                        <p id="victory-msg">Incrível! Você sobreviveu aos 60 segundos com reflexos lendários!</p>
+                    </div>
+                </div>
+                
+                <div class="info-block" style="flex-direction: column; gap: 8px;">
+                    <h3>Estatísticas da Conquista:</h3>
+                    <div class="modal-stats-grid">
+                        <div class="modal-stat-item">
+                            <div class="modal-stat-label">PONTUAÇÃO</div>
+                            <div class="modal-stat-val" id="vic-score" style="color: var(--highlight);">0</div>
+                        </div>
+                        <div class="modal-stat-item">
+                            <div class="modal-stat-label">RECORDE GERAL</div>
+                            <div class="modal-stat-val" id="vic-record">0</div>
+                        </div>
+                        <div class="modal-stat-item">
+                            <div class="modal-stat-label">NÍVEL FINAL</div>
+                            <div class="modal-stat-val" id="vic-level">5</div>
+                        </div>
+                        <div class="modal-stat-item">
+                            <div class="modal-stat-label">COMBO MAX</div>
+                            <div class="modal-stat-val" id="vic-combo">x4</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="joy-btn btn-modal-action" id="btn-restart-victory" aria-label="Jogar Novamente">
+                    <i class="fas fa-play"></i> JOGAR NOVAMENTE
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts da Engine Modular -->
     <script type="module" src="./src/scripts/engine.js"></script>
 </body>
 </html>

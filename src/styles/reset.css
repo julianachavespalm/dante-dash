@@ -1,8 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Wix+Madefor+Display&display=swap');
-
 * {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }

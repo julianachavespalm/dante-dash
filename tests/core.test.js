@@ -75,35 +75,35 @@ describe("ScoreEngine - Regras de Pontuação, Combo e Vidas", () => {
 });
 
 describe("SpawnEngine - Temporização Adaptativa em 5 Níveis e Sorteio", () => {
-    it("deve iniciar calmo no Nível 1 (1400ms) e progredir até o Nível 5 (450ms)", () => {
+    it("deve iniciar calmo no Nível 1 (1540ms) e progredir até o Nível 5 (495ms)", () => {
         const spawn = new SpawnEngine();
         
         // Nível 1: Começo calmo
         const lvl1 = spawn.calculateLevel(0);
         assert.equal(lvl1.level, 1);
-        assert.equal(lvl1.velocity, 1400);
+        assert.equal(lvl1.velocity, 1540);
 
         // Nível 2: 30 pontos
         const lvl2 = spawn.calculateLevel(30);
         assert.equal(lvl2.level, 2);
-        assert.equal(lvl2.velocity, 1100);
+        assert.equal(lvl2.velocity, 1210);
         assert.equal(lvl2.isLevelUp, true);
 
         // Nível 3: 80 pontos
         const lvl3 = spawn.calculateLevel(80);
         assert.equal(lvl3.level, 3);
-        assert.equal(lvl3.velocity, 850);
+        assert.equal(lvl3.velocity, 935);
         assert.equal(lvl3.isLevelUp, true);
 
         // Nível 4: 150 pontos
         const lvl4 = spawn.calculateLevel(150);
         assert.equal(lvl4.level, 4);
-        assert.equal(lvl4.velocity, 650);
+        assert.equal(lvl4.velocity, 715);
 
         // Nível 5: 250 pontos
         const lvl5 = spawn.calculateLevel(250);
         assert.equal(lvl5.level, 5);
-        assert.equal(lvl5.velocity, 450);
+        assert.equal(lvl5.velocity, 495);
     });
 
     it("deve sortear posições válidas sem repetição imediata", () => {
