@@ -277,6 +277,8 @@ footer {
     justify-content: space-between;
     align-items: center;
     flex-shrink: 0;
+    min-height: 48px;
+    box-sizing: content-box;
     padding-bottom: 12px;
     margin-bottom: 12px;
     gap: 15px; /* Impede sobreposição entre título e botão */
@@ -350,6 +352,10 @@ footer {
     position: relative;
     justify-content: center;
     text-align: center;
+    min-height: 48px;
+    box-sizing: content-box;
+    padding-left: 55px;
+    padding-right: 55px;
 }
 
 #modal-game-over .modal-title,
@@ -363,13 +369,13 @@ footer {
 #modal-victory .close-btn {
     position: absolute;
     right: 0;
-    top: 50%;
-    transform: translateY(-50%);
+    top: 0;
+    transform: none;
 }
 
 #modal-game-over .close-btn:active,
 #modal-victory .close-btn:active {
-    transform: translateY(-50%) translate(4px, 4px);
+    transform: translate(4px, 4px);
 }
 
 #modal-game-over .modal-body,
@@ -608,8 +614,8 @@ footer {
 .close-btn {
     position: relative;
     flex-shrink: 0;
-    width: 45px;
-    height: 45px;
+    width: 48px;
+    height: 48px;
     background-color: #000;
     border: 3px solid var(--primary);
     box-shadow: 4px 4px 0 var(--primary);
